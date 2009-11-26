@@ -10,6 +10,4 @@ module PidocoProjectPatch
   end
 end
 
-Dispatcher.to_prepare do
-  Project.send(:include, PidocoProjectPatch) unless Project.include?(PidocoProjectPatch)
-end
+  Project.send(:include, PidocoProjectPatch) #unless Project.include?(PidocoProjectPatch)

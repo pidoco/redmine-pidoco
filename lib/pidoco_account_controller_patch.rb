@@ -1,5 +1,5 @@
 require 'redmine'
-require 'application'
+require 'application_controller'
 require 'account_controller'
 
 module PidocoLoginAccountControllerPatch

@@ -123,8 +123,8 @@ private
       :post => Net::HTTP::Post,
       :put => Net::HTTP::Put,
       :delete => Net::HTTP::Delete}
-    @pidoco_host = 'localhost'
-    @pidoco_port = 8180
+    @pidoco_host = 'alphasketch.com'
+    @pidoco_port = 80
     @pidoco_path_prefix = '/rabbit/api/'
   end
 end

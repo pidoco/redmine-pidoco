@@ -73,6 +73,6 @@ jsToolBar.prototype.elements.page_png = {
 	    try {
     	    Element.remove('pidoco_plugin_div');
 	    } catch(e) {}
-	    window.toolbar.singleTag("!http://localhost:8180/rabbit/api/prototypes/" + uri_part + ".png?api_key=" + key + "!", " ");
+	    window.toolbar.singleTag("!http://alphasketch.com/rabbit/api/prototypes/" + uri_part + ".png?api_key=" + key + "!", " ");
 	}
 }

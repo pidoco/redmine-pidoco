@@ -1,9 +1,9 @@
-require 'projects_helper'
-require 'dispatcher'
+require_dependency 'projects_helper'
+#require 'dispatcher'
 
 module PidocoProjectsHelperPatch
   def self.included(base)
-    base.send(:include, InstanceMethods)
+    base.send(:include, PidocoProjectsHelperPatch::InstanceMethods)
     
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
@@ -11,7 +11,6 @@ module PidocoProjectsHelperPatch
       alias_method_chain :project_settings_tabs, :pidoco_tab
     end
   end
-end
 
 module InstanceMethods
   def project_settings_tabs_with_pidoco_tab
@@ -21,7 +20,5 @@ module InstanceMethods
     tabs
   end
 end
-
-Dispatcher.to_prepare do
-  ProjectsHelper.send(:include, PidocoProjectsHelperPatch) unless ProjectsHelper.include?(PidocoProjectsHelperPatch)
 end
+  ProjectsHelper.send(:include, PidocoProjectsHelperPatch) #unless ProjectsHelper.include?(PidocoProjectsHelperPatch)
