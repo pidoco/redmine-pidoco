@@ -1,0 +1,6 @@
+<h2><%= "Edit Pidoco API Key" %></h2>
+
+<% labelled_tabular_form_for :pidoco_key, @pidoco_key, :url => {:action => 'edit', :id => @pidoco_key, :project_id => @project} do |f| %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  <%= submit_tag l(:button_save) %>
+<% end %>

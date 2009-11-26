@@ -1,0 +1,32 @@
+<h2>pidoco° Prototype Reviews</h2>
+<% @prototypes.each do |prototype| %>
+  <% prototype_name = prototype["prototypeData"]["name"] %>
+  <% discussions = prototype["discussions"] %>
+  <div style="margin-bottom:20px">
+    <h3 id="prot-<%= prototype_name %>"><%= "Prototype " + prototype_name %></h3>
+    <% if discussions.length == 0 %>
+      <div>Currently no discussions.</div>
+    <% end %>
+    <% discussions.each do |discussion| %>
+      <div class="contextual">
+        <%  discussion_text = '' %>
+        <% discussion["entries"].each do |entry| %>
+          <%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
+        <% end %>
+        <%= link_to "New issue from this discussion", 
+          {:controller => 'issues', :action => 'new', :project_id => @project, 
+          :issue => {:subject => discussion["title"] + ' (Prototype ' + prototype_name + ')',
+          :description => discussion_text}} %>
+      </div>
+      <h4 id="prot-<%= prototype_name %>-disc-<%= discussion["title"] %>"><%= discussion["title"] %></h4>
+      <ul>
+      <% discussion["entries"].each do |entry| %>
+
+        <li><%= Time.at(entry["timestamp"]).rfc2822 %> <strong><%= entry["author"] %></strong>: <%= entry["text"] %></li>
+      <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
+
+<p><%= link_to "back", {:controller => 'projects', :action => 'show', :id => @project} %></p>

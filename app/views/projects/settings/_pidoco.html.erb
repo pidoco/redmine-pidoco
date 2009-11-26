@@ -1,0 +1,12 @@
+<table class="list" style="width: 25%">
+<thead><th>Key</th><th></th></thead>
+<tbody>
+<% @project.pidoco_keys.each do |pidoco_key| %>
+<tr class="<%= cycle 'odd', 'even' %>">
+<td><%= link_to_if_authorized pidoco_key.key, {:controller => 'pidoco_keys', :action => 'edit', :id => pidoco_key, :project_id => @project} %></td>
+<td><%= link_to_if_authorized "", {:controller => 'pidoco_keys', :action => 'destroy', :project_id => @project, :id => pidoco_key}, :method => :post, :class => 'icon icon-del' %></td></tr>
+<% end %>
+</tbody>
+</table>
+This is where the Pidoco API keys go.
+<p><%= link_to "Enter new API Key", {:controller => 'pidoco_keys', :action => 'new', :project_id => @project} %></p>
