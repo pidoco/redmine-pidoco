@@ -1,3 +1,5 @@
+<%# TODO: Translations! %>
+<%# TODO: sanitize outputs with html_escape (h)! %>
 <h2>pidoco° Prototype Reviews</h2>
 <% @prototypes.each do |prototype| %>
   <% prototype_name = prototype["prototypeData"]["name"] %>
@@ -7,6 +9,7 @@
     <% if discussions.length == 0 %>
       <div>Currently no discussions.</div>
     <% end %>
+	<%# TODO: Needs pagination. We end up with a huge list if there are many discussions %>
     <% discussions.each do |discussion| %>
       <div class="contextual">
         <%  discussion_text = '' %>
@@ -18,10 +21,11 @@
           :issue => {:subject => discussion["title"] + ' (Prototype ' + prototype_name + ')',
           :description => discussion_text}} %>
       </div>
+      <%# TODO: use content_tag(:h4, discussion['title'], :id => "prot-#{prototype_name}-disc-#{discussion['title']}") to be more elegant. using <%  inside HTML is a bit ugly ;) %>
       <h4 id="prot-<%= prototype_name %>-disc-<%= discussion["title"] %>"><%= discussion["title"] %></h4>
       <ul>
       <% discussion["entries"].each do |entry| %>
-
+		<%# TODO: use localized time formatting using Rails I18n %>
         <li><%= Time.at(entry["timestamp"]).rfc2822 %> <strong><%= entry["author"] %></strong>: <%= entry["text"] %></li>
       <% end %>
       </ul>

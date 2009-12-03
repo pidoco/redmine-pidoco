@@ -29,9 +29,11 @@ new Ajax.Request('/pidoco/prototypes/' + ProjectId, {
         }
         result += '</ul>';
         Element.insert(pidocoDiv, {bottom: result});
+		//TODO: remove!
         //pidocoDiv.appendChild(document.createTextNode(jsonResponse));
     },
     onFailure: function(transport) {
+		//TODO: remove!
       console.log("Yada yada yada!");
     }
 });

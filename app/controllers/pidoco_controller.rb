@@ -18,10 +18,14 @@ class PidocoController < ApplicationController
       prototypes_uri = @pidoco_path_prefix + 'prototypes.json?'
       prototypes_uri_with_api_key = prototypes_uri + 'api_key=' + pidoco_key.key # no '&'
       req = @request_classes[request.method].new(prototypes_uri_with_api_key)
+
+      # TODO: think about caching or at least error handling and gracefully failing here in case pidoco server can't be reached (jsh)
       res = Net::HTTP.start(@pidoco_host, @pidoco_port) {|http| http.request(req) }
       case res
         when Net::HTTPSuccess, Net::HTTPRedirection
           prototypes = JSON.parse(res.body)
+
+          # TODO: need to limit number of requests here or do caching. this can easily become a bottleneck! (jsh)
           prototypes.each do |prototype|
             # Retrieve the details for each prototype (usually only 1)
             pages_uri = @pidoco_path_prefix + 'prototypes/' + prototype.to_s + '.json?'
@@ -45,10 +49,15 @@ class PidocoController < ApplicationController
       prototypes_uri = @pidoco_path_prefix + 'prototypes.json?'
       prototypes_uri_with_api_key = prototypes_uri + 'api_key=' + pidoco_key.key # no '&'
       req = @request_classes[request.method].new(prototypes_uri_with_api_key)
+
+      # TODO: think about caching or at least error handling and gracefully failing here in case pidoco server can't be reached (jsh)
       res = Net::HTTP.start(@pidoco_host, @pidoco_port) {|http| http.request(req) }
       case res
         when Net::HTTPSuccess, Net::HTTPRedirection
           _prototypes = JSON.parse(res.body)
+
+          # TODO: need to limit number of requests here or do caching. this can easily become a bottleneck! (jsh)
+          # QUESTION: why start a variable name with _ ? ;)
           _prototypes.each do |prototype|
           # Retrieve the details for each prototype (usually only 1)
           pages_uri = @pidoco_path_prefix + 'prototypes/' + prototype.to_s + '.json?'
@@ -69,6 +78,7 @@ class PidocoController < ApplicationController
     end
   end
   
+  # TODO: remove deprecated code!
   def discussions_old
     uri = @pidoco_path_prefix + "prototypes/" + params[:prototype_id] + ".json?api_key=" + @pidoco_key.key
     req = @request_classes[:get].new(uri)
@@ -84,6 +94,8 @@ class PidocoController < ApplicationController
   end
   
 private
+
+  # TODO: remove deprecated code! (if you need it later, there's always a VCS history)
   def api(*arg)
     # This method is obsolete. … But maybe we'll need it later.
     # This is a proxy that forwards ajax requests from our plugin to the redmine api.
@@ -111,6 +123,8 @@ private
   end
 
 private
+
+  # TODO: would be nice to have this in a custom field rather than a separate model
   def find_apikey
     @pidoco_key = @project.pidoco_keys.find(:first, :conditions => {:key => params[:api_key]}) 
   rescue ActiveRecord::RecordNotFound
@@ -118,6 +132,16 @@ private
   end
 
 private  
+
+  # TODO: should move this to a "Pidoco" module and use constants, like so:
+  # module Pidoco
+  #   HOST = 'alphasketch.com'
+  #   PORT = 80
+  #   ...
+  #   module AccountControllerPatch
+  #     ...
+  #   end
+  # end
   def setup_pidoco
     @request_classes = {:get => Net::HTTP::Get,
       :post => Net::HTTP::Post,

@@ -25,6 +25,7 @@
 
 jsToolBar.prototype.elements.page_png = {
 	type: 'button',
+	// QUESTION: how is I18n handled in other cases?
 	title: 'Embed an image of a prototype page',
 	fn: { wiki: function() { 
             new Ajax.Request('/pidoco/prototypes/' + ProjectId, {
@@ -34,6 +35,7 @@ jsToolBar.prototype.elements.page_png = {
                     this.getUrlForImage(jsonResponse);
                 }.bind(jsToolBar.prototype.elements.page_png),
                 onFailure: function(transport) {
+				  // TODO: remove!
                   console.log("Yada yada yada!");
                 }
             });
@@ -43,6 +45,7 @@ jsToolBar.prototype.elements.page_png = {
 	    try {
     	    Element.remove('pidoco_plugin_div');
 	    } catch(e) {}
+		// TODO: maybe move this dropdown right in the toolbar?
 	    var result = "<div id='pidoco_plugin_div'" +
 	    "<select name='pageId' onchange='jsToolBar.prototype.elements.page_png.insertPngLink( " +
         	    "this.options[this.selectedIndex].value, " +
