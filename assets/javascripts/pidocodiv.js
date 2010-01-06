@@ -1,3 +1,4 @@
+// TODO Sanitize!
 new Ajax.Request('/pidoco/prototypes/' + ProjectId, {
     method: 'get', 
     onSuccess: function(transport) {

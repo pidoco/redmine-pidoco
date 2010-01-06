@@ -19,7 +19,7 @@ Redmine::Plugin.register :redmine_pidoco do
     :caption => 'Pidoco', :after => :activity, :param => :project_id, :public => true
   
   project_module :pidoco do
-    permission :manage_pidoco, {:pidoco_keys => [:new, :edit, :destroy]}
+    permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy]}
   end
   
 end

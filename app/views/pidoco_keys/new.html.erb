@@ -1,7 +1,7 @@
 <%# TODO: Translations! %>
-<h2><%= "New Pidoco API Key" %></h2>
+<h2><%= l(:new_pidoco_key) %></h2>
 
-<% labelled_tabular_form_for :pidoco_key, @pidoco_key, :url => {:action => 'new', :project_id => @project} do |f| %>
+<% labelled_tabular_form_for :pidoco_key, @pidoco_key, :url => {:action => 'create', :project_id => @project} do |f| %>
   <%= render :partial => 'form', :locals => {:f => f} %>
   <%= submit_tag l(:button_create) %>
 <% end %>

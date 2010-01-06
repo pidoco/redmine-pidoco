@@ -1,32 +1,34 @@
-<%# TODO: Translations! %>
-<%# TODO: sanitize outputs with html_escape (h)! %>
 <h2>pidoco° Prototype Reviews</h2>
 <% @prototypes.each do |prototype| %>
-  <% prototype_name = prototype["prototypeData"]["name"] %>
+  <% prototype_name = h prototype["prototypeData"]["name"] %>
   <% discussions = prototype["discussions"] %>
   <div style="margin-bottom:20px">
-    <h3 id="prot-<%= prototype_name %>"><%= "Prototype " + prototype_name %></h3>
+    <%= content_tag(:h3, l(:prototype) + ": #{prototype_name}", :id => "prot-#{prototype_name}") %>
     <% if discussions.length == 0 %>
-      <div>Currently no discussions.</div>
+      <div><%= l(:no_discussions) %></div>
     <% end %>
 	<%# TODO: Needs pagination. We end up with a huge list if there are many discussions %>
+	<%# Not so easy since we don't work on a model here and the API returns _all_ discussions. Paginator seems to be able to do that though. %>
     <% discussions.each do |discussion| %>
       <div class="contextual">
+				<% discussion_title = h discussion["title"] %>
         <%  discussion_text = '' %>
         <% discussion["entries"].each do |entry| %>
-          <%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
+          <%  discussion_text += h(entry["author"] + ': ' + entry["text"] + " | ")%>
         <% end %>
-        <%= link_to "New issue from this discussion", 
+        <%= link_to l(:new_issue_from_discussion), 
           {:controller => 'issues', :action => 'new', :project_id => @project, 
-          :issue => {:subject => discussion["title"] + ' (Prototype ' + prototype_name + ')',
+          :issue => {:subject => discussion_title + ' (Prototype ' + prototype_name + ')',
           :description => discussion_text}} %>
       </div>
-      <%# TODO: use content_tag(:h4, discussion['title'], :id => "prot-#{prototype_name}-disc-#{discussion['title']}") to be more elegant. using <%  inside HTML is a bit ugly ;) %>
-      <h4 id="prot-<%= prototype_name %>-disc-<%= discussion["title"] %>"><%= discussion["title"] %></h4>
+      <%= content_tag(:h4, discussion_title, :id => "prot-#{prototype_name}-disc-#{discussion_title}") %>
       <ul>
       <% discussion["entries"].each do |entry| %>
 		<%# TODO: use localized time formatting using Rails I18n %>
-        <li><%= Time.at(entry["timestamp"]).rfc2822 %> <strong><%= entry["author"] %></strong>: <%= entry["text"] %></li>
+        <li>
+					<%# Use milliseconds instead of microseconds. %>
+					<%= l Time.at(entry["timestamp"]/1000), :format => :standard, :locale => :en %><strong><%= h entry["author"] %></strong>: <%= h entry["text"] %>
+				</li>
       <% end %>
       </ul>
     <% end %>

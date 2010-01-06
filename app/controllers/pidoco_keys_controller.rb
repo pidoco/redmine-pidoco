@@ -1,9 +1,11 @@
 class PidocoKeysController < ApplicationController
   before_filter :find_project, :authorize
 
-  # TODO: should be separate methods: new should handle GET to pidoco_keys/new; create should handle POST to pidoco_keys/
-  # http://api.rubyonrails.org/classes/ActionController/Resources.html
   def new
+    @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
+  end
+  
+  def create
     @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
     if request.post? && @pidoco_key.save
       flash[:notice] = l(:notice_successful_create)
@@ -11,9 +13,11 @@ class PidocoKeysController < ApplicationController
     end
   end
   
-  # TODO: should be separate methods: edit should handle GET to pidoco_keys/edit; update should handle PUT to pidoco_keys/:id
-  # http://api.rubyonrails.org/classes/ActionController/Resources.html
   def edit
+  end
+
+  def update
+    # TODO I know I should PUT. No idea how, though. Probably need to fuzz with the routes?
     if request.post? && @pidoco_key.update_attributes(params[:pidoco_key])
       redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
     end
