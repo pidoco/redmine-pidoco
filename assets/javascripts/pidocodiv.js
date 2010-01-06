@@ -29,11 +29,11 @@ new Ajax.Request('/pidoco/prototypes/' + ProjectId, {
         }
         result += '</ul>';
         Element.insert(pidocoDiv, {bottom: result});
-		//TODO: remove!
-        //pidocoDiv.appendChild(document.createTextNode(jsonResponse));
     },
     onFailure: function(transport) {
-		//TODO: remove!
-      console.log("Yada yada yada!");
+      // The controller will respond with a 404 in case pidoco is not reachable etc.
+		  var pidocoDiv = document.getElementById('pidocodiv');
+      pidocoDiv.removeChild(pidocoDiv.firstChild);
+      Element.insert(pidocoDiv, {bottom: "An error occured while trying to reach the pidoco° server."});
     }
 });

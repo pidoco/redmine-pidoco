@@ -1,4 +1,3 @@
-require 'pidoco_account_controller_patch'
 require 'pidoco_wiki_formatting_helper_patch'
 require 'pidoco_projects_helper_patch'
 require 'pidoco_project_patch'
