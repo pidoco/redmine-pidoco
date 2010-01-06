@@ -27,7 +27,7 @@
 		<%# TODO: use localized time formatting using Rails I18n %>
         <li>
 					<%# Use milliseconds instead of microseconds. %>
-					<%= l Time.at(entry["timestamp"]/1000), :format => :standard, :locale => :en %><strong><%= h entry["author"] %></strong>: <%= h entry["text"] %>
+					<%= h format_time(Time.at(entry["timestamp"]/1000)) %><strong><%= h entry["author"] %></strong>: <%= h entry["text"] %>
 				</li>
       <% end %>
       </ul>
