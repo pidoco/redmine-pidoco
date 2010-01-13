@@ -7,7 +7,6 @@ module PidocoProjectsHelperPatch
     
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-      puts "Ping"
       alias_method_chain :project_settings_tabs, :pidoco_tab
     end
   end
