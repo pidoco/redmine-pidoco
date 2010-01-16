@@ -1,4 +1,5 @@
 class PidocoKeysController < ApplicationController
+  unloadable
   before_filter :find_project, :authorize
 
   def new
@@ -6,10 +7,15 @@ class PidocoKeysController < ApplicationController
   end
   
   def create
-    @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
-    if request.post? && @pidoco_key.save
-      flash[:notice] = l(:notice_successful_create)
-      redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
+    if request.post? 
+      @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
+      if @pidoco_key.save
+        flash[:notice] = l(:notice_successful_create)
+        redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
+      else
+        flash.now[:error] = l(:notice_create_failed)
+        render :action => 'new'
+      end
     end
   end
   

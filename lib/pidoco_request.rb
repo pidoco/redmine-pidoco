@@ -10,6 +10,7 @@ module PidocoRequest
     # if Settings[:pidoco_etags][url] == etag from HEAD return
     # otherwise do this: (and don't forget to store new etags/expires!)
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
+    puts request_uri
     request = Net::HTTP::Get.new(request_uri)
     begin
       response = Net::HTTP.start(HOST, PORT) { |http| http.request(request) }

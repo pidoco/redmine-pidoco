@@ -1,6 +1,3 @@
-require_dependency 'project'
-require 'dispatcher'
-
 module PidocoProjectPatch
   def self.included(base)
     base.class_eval do
@@ -9,5 +6,3 @@ module PidocoProjectPatch
     end
   end
 end
-
-  Project.send(:include, PidocoProjectPatch) #unless Project.include?(PidocoProjectPatch)

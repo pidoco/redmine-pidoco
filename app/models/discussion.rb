@@ -1,23 +1,34 @@
 require 'net/http'
 require 'json'
 
-class Prototype < ActiveRecord::Base
+class Discussion < ActiveRecord::Base
   # TODO: Should probably refactor a BaseClass from this so all pidoco resources look the same
 
   include PidocoRequest
   
-  belongs_to :pidoco_key
-  has_many :discussions
+  belongs_to :prototype
+  belongs_to :pidoco_key, :include => :project # this is is redundant information... on the other hand: prototype means querying!
+  serialize :entries
   after_create :refresh_from_api_if_necessary
+  
+  acts_as_event(
+    :author => l(:via_pidoco_API), 
+    :url => Proc.new {|o| {:controller => 'discussions', :action => 'index'}},
+    :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
+  acts_as_activity_provider :find_options => {:include => {:pidoco_key, :project}}
 
   def after_find
-    if self.pidoco_key
+    if self.prototype && self.pidoco_key
       refresh_from_api_if_necessary
     end
   end
+  
+  def project
+    self.pidoco_key.project
+  end
 
   def refresh_from_api_if_necessary
-    uri = "prototypes/#{id}.json"
+    uri = "prototypes/#{prototype_id}/discussions/#{id}.json"
     res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
     case res
       when Net::HTTPSuccess
@@ -33,15 +44,19 @@ class Prototype < ActiveRecord::Base
   
   def update_with_api_data(api_data)
     attributes = {}
-    attributes[:name] = api_data["prototypeData"]["name"]
-    attributes[:last_modified] = api_data["prototypeData"]["lastModification"]
+    attributes[:title] = api_data["title"]
+    attributes[:prototype_id] = api_data["prototypeId"]
+    attributes[:entries] = api_data["entries"]
+    attributes[:timestamp] = api_data["timestamp"]
+    attributes[:last_entry] = api_data["lastEntryDate"]
     update_attributes(attributes)
   end
-
+  
   def self.poll_if_necessary
     # TODO: only consider keys for a specific project
-    PidocoKey.all.each do |pidoco_key|
-      uri = "prototypes.json"
+    Prototype.all.each do |prototype| # Not entirely sure over what to iterate here
+      pidoco_key = prototype.pidoco_key
+      uri = "prototypes/#{prototype.id}/discussions.json"
       res = PidocoRequest::request_if_necessary(uri, pidoco_key)
       case res
         when Net::HTTPSuccess
@@ -52,6 +67,7 @@ class Prototype < ActiveRecord::Base
               p = self.new()
               p.id = id
               p.pidoco_key = pidoco_key
+              p.prototype = prototype
               p.save
             end
           end
@@ -63,5 +79,7 @@ class Prototype < ActiveRecord::Base
     self.poll_if_necessary
     self.find(*args)
   end
+  
+  
   
 end

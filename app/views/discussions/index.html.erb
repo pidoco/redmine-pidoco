@@ -1,0 +1,27 @@
+<%= content_tag(:h2, l(:Discussions_for_project) + h(@project.name)) %>
+<% @prototypes.each do |prototype| %>
+	<div style="margin-bottom:20px">
+    <%= content_tag(:h3, l(:Prototype) + h(prototype.name), :id => h(prototype.name)) %>
+    <% if prototype.discussions.length == 0 %>
+      <div><%= l(:no_discussions) %></div>
+		<% else %>
+      <% prototype.discussions.each do |discussion| %>
+				<div class="contextual">
+	        <%= link_to l(:new_issue_from_discussion), 
+	          {:controller => :issues, :action => 'new', :project_id => @project, 
+	          :issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')'}} %>
+				</div>
+					<ul>
+						<% discussion.entries.each do |entry| %>
+							<li>
+								<%= h format_time(Time.at(entry["timestamp"]/1000)) %>, <%= l(:by) %>
+								<strong><%= h entry["author"] %></strong>: 
+								<%= h entry["text"] %>
+							</li>
+		        <% end %>
+					</ul>
+	      
+			<% end %>
+    <% end %>
+	</div>
+<% end %>
