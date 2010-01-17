@@ -3,9 +3,10 @@ class CreateDiscussions < ActiveRecord::Migration
     create_table :discussions do |t|
       t.column :title, :string
       t.column :prototype_id, :integer
+      t.column :page_id, :string
       t.column :entries, :text
-      t.column :timestamp, :integer
-      t.column :last_entry, :integer
+      t.column :timestamp, :string
+      t.column :last_entry, :string
       t.timestamps
     end
   end

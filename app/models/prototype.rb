@@ -8,6 +8,7 @@ class Prototype < ActiveRecord::Base
   
   belongs_to :pidoco_key
   has_many :discussions
+  serialize :page_names
   after_create :refresh_from_api_if_necessary
 
   def after_find
@@ -34,6 +35,7 @@ class Prototype < ActiveRecord::Base
   def update_with_api_data(api_data)
     attributes = {}
     attributes[:name] = api_data["prototypeData"]["name"]
+    attributes[:page_names] = api_data["pageNames"]
     attributes[:last_modified] = api_data["prototypeData"]["lastModification"]
     update_attributes(attributes)
   end

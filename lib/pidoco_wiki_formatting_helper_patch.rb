@@ -1,6 +1,3 @@
-require 'redmine/wiki_formatting/textile/helper'
-require 'redmine'
-
 module PidocoWikiFormattingHelperPatch
   def self.included(base)
     base.send(:include, InstanceMethods)
@@ -18,12 +15,10 @@ module PidocoWikiFormattingHelperPatch
       stylesheet_link_tag("pidoco", :plugin => 'redmine_pidoco') +
         javascript_include_tag('jstoolbar/jstoolbar') +
         javascript_include_tag('jstoolbar/textile') +
-        render(:partial => 'pidoco/projectid_js') +
-        javascript_include_tag("pidocobar", :plugin => 'redmine_pidoco') +
+        render(:partial => 'wiki/pidocobar') +
+        #javascript_include_tag("pidocobar", :plugin => 'redmine_pidoco') +
         javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language}") +
         javascript_tag("var toolbar = new jsToolBar($('#{field_id}')); toolbar.setHelpLink('#{help_link}'); toolbar.draw();")
     end
   end
 end
-
-Redmine::WikiFormatting::Textile::Helper.send(:include, PidocoWikiFormattingHelperPatch)

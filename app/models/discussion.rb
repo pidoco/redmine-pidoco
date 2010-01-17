@@ -6,16 +6,17 @@ class Discussion < ActiveRecord::Base
 
   include PidocoRequest
   
+  belongs_to :pidoco_key # this is is redundant information... on the other hand: prototype means querying the api!
   belongs_to :prototype
-  belongs_to :pidoco_key, :include => :project # this is is redundant information... on the other hand: prototype means querying!
   serialize :entries
   after_create :refresh_from_api_if_necessary
   
   acts_as_event(
     :author => l(:via_pidoco_API), 
-    :url => Proc.new {|o| {:controller => 'discussions', :action => 'index'}},
+    :datetime => :created_at,
+    :url => Proc.new {|o| {:controller => 'discussions', :action => 'index', :project => o.project}},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
-  acts_as_activity_provider :find_options => {:include => {:pidoco_key, :project}}
+  acts_as_activity_provider :timestamp => "#{table_name}.created_at", :find_options => {:include => {:pidoco_key, :project}}
 
   def after_find
     if self.prototype && self.pidoco_key
@@ -24,7 +25,9 @@ class Discussion < ActiveRecord::Base
   end
   
   def project
-    self.pidoco_key.project
+    # Returning the object raises an exception upon reloading the activity stream ("Association has no to_s method").
+    # The reason seems to be the broken eager loading on belongs_to associations?
+    self.pidoco_key.project.name
   end
 
   def refresh_from_api_if_necessary
@@ -46,6 +49,7 @@ class Discussion < ActiveRecord::Base
     attributes = {}
     attributes[:title] = api_data["title"]
     attributes[:prototype_id] = api_data["prototypeId"]
+    attributes[:page_id] = api_data["pageId"]
     attributes[:entries] = api_data["entries"]
     attributes[:timestamp] = api_data["timestamp"]
     attributes[:last_entry] = api_data["lastEntryDate"]

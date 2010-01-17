@@ -6,11 +6,16 @@
       <div><%= l(:no_discussions) %></div>
 		<% else %>
       <% prototype.discussions.each do |discussion| %>
-				<div class="contextual">
+        <%  discussion_text = '' %>
+        <% discussion["entries"].each do |entry| %>
+          <%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
+        <% end %>
+				<div class="contextual" style="padding-bottom:20px">
 	        <%= link_to l(:new_issue_from_discussion), 
 	          {:controller => :issues, :action => 'new', :project_id => @project, 
-	          :issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')'}} %>
+	          :issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')', :description => discussion_text}} %>
 				</div>
+				<%= content_tag(:h5, h(discussion.title)) %>
 					<ul>
 						<% discussion.entries.each do |entry| %>
 							<li>

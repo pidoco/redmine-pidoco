@@ -1,0 +1,88 @@
+<script type="text/javascript">
+// TODO: remove logging
+var ProjectId="<%= @project.identifier %>";//console.log(ProjectId);
+
+// TODO Licensing
+/* ***** BEGIN LICENSE BLOCK *****
+ * This file is part of DotClear.
+ * Copyright (c) 2005 Nicolas Martin & Olivier Meunier and contributors. All
+ * rights reserved.
+ *
+ * DotClear is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * DotClear is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with DotClear; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * ***** END LICENSE BLOCK *****
+*/
+
+/* Modified by JP LANG for textile formatting */
+
+jsToolBar.prototype.elements.page_png = {
+	type: 'button',
+	title: "<%= l(:embed_page) %>",
+	fn: { wiki: function() {
+	          var prototypes = new Array();
+	          var prototype = {};
+	          var pages = {};
+						<% @project.prototypes.each do |prototype| %>
+						  prototype = { "id" : "<%= prototype.id%>", "name" : "<%= prototype.name%>", "key" : "<%= prototype.pidoco_key.key%>" };
+						  pages = {};
+						  <% prototype.page_names.keys.each do |pageId| %>
+						    pages["<%= pageId %>"] = "<%= prototype.page_names[pageId] %>";
+						  <% end %>
+					    prototype["pages"] = pages;
+				      prototypes.push(prototype);
+						<% end %>
+						jsToolBar.prototype.elements.page_png.drawDropDown(prototypes);
+        }
+	},
+	drawDropDown: function(o) {
+	    try {
+    	    Element.remove('pidoco_plugin_div');
+	    } catch(e) {}
+		// TODO: maybe move this dropdown right in the toolbar?
+	    var result = "<select id ='pidoco_select' name='pageId' onchange='jsToolBar.prototype.elements.page_png.insertPngLink( " +
+        	    "this.options[this.selectedIndex].value, " +
+        	    "this.options[this.selectedIndex].parentNode.getAttribute(\"apikey\"))'>" +
+	        "<option value='0'>Choose a page...</option>";
+	    var t1 = new Template('<optgroup apikey="#{key}" style="font-weight:bold;" label="#{prototype}">');
+	    var t2 = new Template('<option value="#{prototype_id}/pages/#{id}">::#{name}</option>');
+	    for each(var _prototype in o) {
+	        if(typeof(_prototype) != 'function') {
+	            try {
+    	            result += t1.evaluate({prototype: _prototype["name"], key: _prototype["key"]});
+    	        } catch(e) {console.log(e)}
+    	        for (var _page in _prototype.pages) {
+        	        try {
+                        result += t2.evaluate({prototype_id: _prototype["id"], id: _page, name: _prototype.pages[_page]});
+    	            } catch(e) {}                
+    	        }
+    	        result += '</optgroup>'
+            }
+	    }
+	    result += "</select>";
+	    Element.insert(document.getElementsByClassName("jstb_page_png")[0], {after: result});
+	},
+	insertPngLink: function(uri_part, key) {
+	    if(uri_part == null || uri_part == "") {
+	        return;
+	    }
+	    try {
+    	    Element.remove('pidoco_select');
+	    } catch(e) {}
+	    var url = "http://localhost:8180/rabbit/api/";
+	    window.toolbar.singleTag("!" + url + "prototypes/" + uri_part + ".png?api_key=" + key + "!", " ");
+	}
+	
+}
+</script>
