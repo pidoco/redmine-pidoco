@@ -28,5 +28,6 @@ Redmine::Plugin.register :redmine_pidoco do
   end
   
  activity_provider :discussions
+ settings(:default => {})
   
 end

@@ -37,6 +37,8 @@ class Discussion < ActiveRecord::Base
       when Net::HTTPSuccess
         api_data = JSON.parse(res.body)
         update_with_api_data(api_data)
+      when Net::HTTPNotModified
+        return false
       when Net::HTTPForbidden
         delete
         return false
@@ -75,6 +77,8 @@ class Discussion < ActiveRecord::Base
               p.save
             end
           end
+        when Net::HTTPNotModified
+          return false
       end
     end
   end

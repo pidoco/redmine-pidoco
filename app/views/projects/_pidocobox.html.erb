@@ -4,8 +4,9 @@
   <% @project.pidoco_keys.each do |pidoco_key| %>
   	<% Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}).each do |prototype| %>
 			<% no_prototypes = false %>
-			<li><strong><%= h prototype.name %></strong>: 
-				<%= l(:last_change_on) %> <%= format_time(Time.at(prototype.last_modified/1000)) %>,
+			<li><strong><%= h prototype.name %></strong>:
+			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
+				<%= l(:last_change_on) %> <%= format_time(time) %>,
       <%= prototype.discussions.length %> <%= link_to(l(:discussions), :controller => :discussions, :action => :index, :project =>
  				@project, :anchor => h(prototype.name)) %></li>
 			<% end %>
