@@ -76,8 +76,8 @@ class Discussion < ActiveRecord::Base
             unless self.exists? id
               p = self.new()
               p.id = id
-              p.pidoco_key = pidoco_key
-              p.prototype = prototype
+              p.pidoco_key_id = pidoco_key.id
+              p.prototype_id = prototype.id
               p.save
             end
           end

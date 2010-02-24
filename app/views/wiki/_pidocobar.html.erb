@@ -45,7 +45,7 @@
   						jsToolBar.prototype.elements.page_png.drawDropDown(prototypes);
           }
   	},
-  	drawDropDown: function(o) {
+  	drawDropDown: function(prototypes) {
   	    try {
       	    Element.remove('pidoco_plugin_div');
   	    } catch(e) {}
@@ -56,14 +56,15 @@
   	        "<option value='0'>Choose a page...</option>";
   	    var t1 = new Template('<optgroup apikey="#{key}" style="font-weight:bold;" label="#{prototype}">');
   	    var t2 = new Template('<option value="#{prototype_id}/pages/#{id}">::#{name}</option>');
-  	    for each(var _prototype in o) {
-  	        if(typeof(_prototype) != 'function') {
+  	    for(var i=0; i < prototypes.length; i++) {
+  	        ptype = prototypes[i];
+  	        if(typeof(prototype) !== 'function') {
   	            try {
-      	            result += t1.evaluate({prototype: _prototype["name"], key: _prototype["key"]});
+      	            result += t1.evaluate({prototype: ptype["name"], key: ptype["key"]});
       	        } catch(e) {console.log(e)}
-      	        for (var _page in _prototype.pages) {
+      	        for (var pageId in ptype.pages) {
           	        try {
-                          result += t2.evaluate({prototype_id: _prototype["id"], id: _page, name: _prototype.pages[_page]});
+                          result += t2.evaluate({prototype_id: ptype["id"], id: pageId, name: ptype.pages[pageId]});
       	            } catch(e) {}                
       	        }
       	        result += '</optgroup>'
