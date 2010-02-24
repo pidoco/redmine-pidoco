@@ -37,9 +37,22 @@ class Prototype < ActiveRecord::Base
   def update_with_api_data(api_data)
     attributes = {}
     attributes[:name] = api_data["prototypeData"]["name"]
-    attributes[:page_names] = api_data["pageNames"]
+    page_names = get_page_names_from_api()
+    attributes[:page_names] = page_names if page_names
     attributes[:last_modified] = api_data["prototypeData"]["lastModification"]
     update_attributes(attributes)
+  end
+  
+  def get_page_names_from_api
+    uri = "prototypes/#{self.id}/pages.json"
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key)
+    case res
+      when Net::HTTPSuccess
+        page_names = JSON.parse(res.body)
+      else
+        page_names = nil
+    end
+    page_names
   end
 
   def self.poll_if_necessary
