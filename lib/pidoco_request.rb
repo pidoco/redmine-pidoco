@@ -1,7 +1,7 @@
 module PidocoRequest
-  HOST = 'localhost'
-  PORT = 8180
-  URI_PREFIX = '/rabbit/api/'
+  HOST = Setting[:plugin_redmine_pidoco]["HOST"]
+  PORT = Setting[:plugin_redmine_pidoco]["PORT"]
+  URI_PREFIX = Setting[:plugin_redmine_pidoco]["URI_PREFIX"]
   
   def request_if_necessary(uri, pidoco_key)
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
@@ -21,7 +21,7 @@ module PidocoRequest
         "last_modified_" + request_uri => response['Last-Modified'],
         "date_" + request_uri => response['Date']
       )
-      response
+      return response
     rescue Errno::ECONNREFUSED, Timeout::Error, SocketError => e
     # TODO: Not really sure which errors to check for here... but this seems to work at least.
       return nil

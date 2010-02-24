@@ -27,7 +27,11 @@ Redmine::Plugin.register :redmine_pidoco do
     permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy]}
   end
   
- activity_provider :discussions
- settings(:default => {})
+  activity_provider :discussions
+  settings(:default => {
+    "HOST" => 'localhost',
+    "PORT" => 8180,
+    "URI_PREFIX" => '/rabbit/api/'
+  })
   
 end
