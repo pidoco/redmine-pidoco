@@ -14,7 +14,11 @@ class Discussion < ActiveRecord::Base
   acts_as_event(
     :author => l(:via_pidoco_API), 
     :datetime => :created_at,
-    :url => Proc.new {|o| {:controller => 'discussions', :action => 'index', :project => o.project}},
+    :url => Proc.new {|o| {
+      :controller => 'discussions', 
+      :action => 'index', 
+      :project => o.project,
+      :anchor => "prototype_#{o.prototype_id}_#{o.id}"}},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
   acts_as_activity_provider :timestamp => "#{table_name}.created_at", :find_options => {:include => {:pidoco_key, :project}}
 

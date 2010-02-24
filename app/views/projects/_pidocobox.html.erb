@@ -8,7 +8,11 @@
 			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
 				<%= l(:last_change_on) %> <%= format_time(time) %>,
         <%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length %>
-        <%= link_to(l(:discussions), :controller => :discussions, :action => :index, :project => @project, :anchor => h(prototype.name)) %>
+        <%= link_to(l(:discussions), 
+          :controller => :discussions, 
+          :action => :index, 
+          :project => @project, 
+          :anchor => h("prototype_#{prototype.id}")) %>
  			</li>
 			<% end %>
 	<% end %>

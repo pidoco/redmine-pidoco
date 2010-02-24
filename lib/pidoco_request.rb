@@ -4,7 +4,6 @@ module PidocoRequest
   URI_PREFIX = '/rabbit/api/'
   
   def request_if_necessary(uri, pidoco_key)
-    puts "Request for #{uri}"
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
     request = Net::HTTP::Get.new(request_uri)
     last_mod = Setting[:plugin_redmine_pidoco]["last_modified_" + request_uri]
@@ -12,7 +11,6 @@ module PidocoRequest
     # Don't request more than once every 60 seconds. Otherwise we would end up requesting the prototype too often
     # when displaying all discussions, e.g.
     if date.try(:length) && ((Time.parse(date) + 60) > Time.now)
-      puts "Cancelled. Too frequent."
       return nil
     end
     request['If-Modified-Since'] = last_mod if last_mod
@@ -23,7 +21,6 @@ module PidocoRequest
         "last_modified_" + request_uri => response['Last-Modified'],
         "date_" + request_uri => response['Date']
       )
-      puts "Response: #{response}"
       response
     rescue Errno::ECONNREFUSED, Timeout::Error, SocketError => e
     # TODO: Not really sure which errors to check for here... but this seems to work at least.
