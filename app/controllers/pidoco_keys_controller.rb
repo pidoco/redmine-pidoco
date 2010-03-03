@@ -33,6 +33,13 @@ class PidocoKeysController < ApplicationController
     @pidoco_key.destroy
     redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
   end
+  
+  def clear_cache
+    # TODO Maybe this should not be possible for everyone, as soon as we go into production. :)
+    Setting[:plugin_redmine_pidoco] = {}
+    flash[:notice] = l(:pidoco_cache_cleared)
+    redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
+  end
 
 private
   def find_project

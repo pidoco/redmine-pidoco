@@ -7,7 +7,7 @@
     			<li><strong><%= h prototype.name %></strong>:
     			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
     				<%= l(:last_change_on) %> <%= format_time(time) %>,
-            <%= Discussion.count(:conditions => {:prototype_id => prototype.id}) %>
+            <%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length %>
             <%= link_to(l(:discussions), 
               :controller => :discussions, 
               :action => :index, 

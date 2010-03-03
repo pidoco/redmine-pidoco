@@ -1,7 +1,8 @@
 module PidocoRequest
-  HOST = Setting[:plugin_redmine_pidoco]["HOST"]
-  PORT = Setting[:plugin_redmine_pidoco]["PORT"]
-  URI_PREFIX = Setting[:plugin_redmine_pidoco]["URI_PREFIX"]
+  default_settings = Redmine::Plugin.find(:redmine_pidoco).settings[:default]
+  HOST = default_settings["HOST"]
+  PORT = default_settings["PORT"]
+  URI_PREFIX = default_settings["URI_PREFIX"]
   
   def request_if_necessary(uri, pidoco_key)
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key

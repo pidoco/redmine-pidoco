@@ -21,9 +21,9 @@ Redmine::Plugin.register :redmine_pidoco do
   version '0.0.1'
   
   menu :project_menu, :redmine_pidoco, { :controller => :discussions, :action => 'index' }, :caption => 'pidoco°'
-  
+    
   project_module :pidoco do
-    permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy]}
+    permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy, :clear_cache]}
   end
   
   activity_provider :discussions
