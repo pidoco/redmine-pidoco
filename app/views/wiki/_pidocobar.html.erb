@@ -42,6 +42,9 @@
   					    prototype["pages"] = pages;
   				      prototypes.push(prototype);
   						<% end %>
+  						try {
+            	    Element.remove('pidoco_select');
+        	    } catch(e) {}
   						jsToolBar.prototype.elements.page_png.drawDropDown(prototypes);
           }
   	},

@@ -20,8 +20,7 @@ Redmine::Plugin.register :redmine_pidoco do
   description 'This plugin integrates pidoco° with Redmine.'
   version '0.0.1'
   
-  menu :project_menu, :pidoco, { :controller => :discussions, :action => 'index' }, 
-    :caption => 'pidoco°', :after => :activity, :param => :project_id#, :public => true
+  menu :project_menu, :redmine_pidoco, { :controller => :discussions, :action => 'index' }, :caption => 'pidoco°'
   
   project_module :pidoco do
     permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy]}
