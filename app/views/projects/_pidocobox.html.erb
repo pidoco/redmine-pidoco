@@ -1,22 +1,22 @@
 <div class="box">
   <h3><%= l(:prototypes_for_project) %></h3>
+	<% no_prototypes = true %>
   <% @project.pidoco_keys.each do |pidoco_key| %>
-  	<% prototypes = Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}) %>
-  	  <% if prototypes %>
-  	    <% prototypes.each do |prototype| %>
-    			<li><strong><%= h prototype.name %></strong>:
-    			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
-    				<%= l(:last_change_on) %> <%= format_time(time) %>,
-            <%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length %>
-            <%= link_to(l(:discussions), 
-              :controller => :discussions, 
-              :action => :index, 
-              :project => @project, 
-              :anchor => h("prototype_#{prototype.id}")) %>
-     			</li>
-   			<% end %>
-   		<% else %>
-    		<%= l(:no_prototypes_available) %>
+  	<% Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}).each do |prototype| %>
+			<% no_prototypes = false %>
+			<li><strong><%= h prototype.name %></strong>:
+			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
+				<%= l(:last_change_on) %> <%= format_time(time) %>,
+        <%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length %>
+        <%= link_to(l(:discussions), 
+          :controller => :discussions, 
+          :action => :index, 
+          :project => @project, 
+          :anchor => h("prototype_#{prototype.id}")) %>
+ 			</li>
 			<% end %>
 	<% end %>
+	<% if no_prototypes %>
+		<%= l(:no_prototypes_available) %>
+	<% end%>
 </div>
