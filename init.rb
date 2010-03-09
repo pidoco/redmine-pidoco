@@ -28,8 +28,9 @@ Redmine::Plugin.register :redmine_pidoco do
   
   activity_provider :discussions
   settings(:default => {
-    "HOST" => 'localhost',
-    "PORT" => 8180,
+    "HOST" => 'pidoco.com',
+    "PORT" => 443,
+    "SSL" => true,
     "URI_PREFIX" => '/rabbit/api/'
   })
   

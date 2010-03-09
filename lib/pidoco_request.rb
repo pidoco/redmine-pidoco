@@ -2,6 +2,7 @@ module PidocoRequest
   default_settings = Redmine::Plugin.find(:redmine_pidoco).settings[:default]
   HOST = default_settings["HOST"]
   PORT = default_settings["PORT"]
+  SSL = default_settings["SSL"]||false
   URI_PREFIX = default_settings["URI_PREFIX"]
   
   def request_if_necessary(uri, pidoco_key)
@@ -16,7 +17,9 @@ module PidocoRequest
     end
     request['If-Modified-Since'] = last_mod if last_mod
     begin
-      response = Net::HTTP.start(HOST, PORT) { |http| http.request(request) }
+      http = Net::HTTP.new(HOST, PORT)
+      http.use_ssl = SSL
+      response = http.start {|session| session.request(request) }
       # This looks unnecessarily complicated. But if you don't assign the setting with []=, Redmine will not persist it. :-(
       Setting[:plugin_redmine_pidoco] = Setting[:plugin_redmine_pidoco].merge(
         "last_modified_" + request_uri => response['Last-Modified'],
