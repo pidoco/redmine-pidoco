@@ -18,20 +18,32 @@ Redmine::Plugin.register :redmine_pidoco do
   name 'Redmine Pidoco Integration plugin'
   author 'Martin Kreichgauer'
   description 'This plugin integrates pidoco° with Redmine.'
-  version '0.0.1'
+  version '0.1'
   
-  menu :project_menu, :redmine_pidoco, { :controller => :discussions, :action => 'index' }, :caption => 'pidoco'
+  # require json gem
+  config.gem 'json'
   
   project_module :pidoco do
     permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy, :clear_cache]}
+
+    permission :pidoco, {:discussions => [:index]}, :public => true
   end
+
+  menu :project_menu, :pidoco_menu, { :controller => 'discussions', :action => 'index' }, :caption => 'Pidoco°', :after => :activity, :param => :project
   
   activity_provider :discussions
   settings(:default => {
-    "HOST" => 'pidoco.com',
-    "PORT" => 443,
-    "SSL" => true,
+    "HOST" => 'localhost',
+    "PORT" => 8180,
+    "SSL" => false,
     "URI_PREFIX" => '/rabbit/api/'
   })
+  
+#  settings(:default => {
+#    "HOST" => 'pidoco.com',
+#    "PORT" => 443,
+#    "SSL" => true,
+#    "URI_PREFIX" => '/rabbit/api/'
+#  })
   
 end

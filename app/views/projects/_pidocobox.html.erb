@@ -1,22 +1,31 @@
-<div class="box">
+<div class="pidoco_box box">
   <h3><%= l(:prototypes_for_project) %></h3>
 	<% no_prototypes = true %>
   <% @project.pidoco_keys.each do |pidoco_key| %>
+	<ul>
   	<% Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}).each do |prototype| %>
 			<% no_prototypes = false %>
-			<li><strong><%= h prototype.name %></strong>:
+			<li><%= link_to(prototype.name, 
+	          :controller => :discussions, 
+	          :action => :index, 
+	          :project => @project, 
+	          :anchor => h("prototype_#{prototype.id}")) %>:
+      		<%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length%> <%= l(:discussions)%>,
 			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
-				<%= l(:last_change_on) %> <%= format_time(time) %>,
-        <%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length %>
-        <%= link_to(l(:discussions), 
-          :controller => :discussions, 
-          :action => :index, 
-          :project => @project, 
-          :anchor => h("prototype_#{prototype.id}")) %>
+				<%= l(:last_change_on) %> <%= format_time(time) %>
  			</li>
 			<% end %>
 	<% end %>
+	</ul>
 	<% if no_prototypes %>
 		<%= l(:no_prototypes_available) %>
 	<% end%>
+	<%= link_to(l(:view_all_discussions), 
+      :controller => :discussions, 
+      :action => :index, 
+      :project => @project) %>
 </div>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "pidoco.css", :plugin => "redmine_pidoco" %>
+<% end %>

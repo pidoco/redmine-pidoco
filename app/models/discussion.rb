@@ -13,7 +13,8 @@ class Discussion < ActiveRecord::Base
   
   acts_as_event(
     :author => l(:via_pidoco_API), 
-    :datetime => :created_at,
+    :datetime => Proc.new {|o| Time.at(o.last_entry[0..-4].to_i).to_datetime},
+    :title => Proc.new {|o| l(:Discussion) + " #{o.title}"},
     :url => Proc.new {|o| {
       :controller => 'discussions', 
       :action => 'index', 

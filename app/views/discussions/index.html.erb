@@ -1,32 +1,37 @@
-<%= content_tag(:h2, l(:Discussions_for_project) + h(@project.name)) %>
 <% @prototypes.each do |prototype| %>
 	<div id="prototype_<%= prototype.id %>" style="margin-bottom:20px">
-    <%= content_tag(:h3, l(:Prototype) + h(prototype.name), :id => h(prototype.name)) %>
-    <% if prototype.discussions.length == 0 %>
-      <div><%= l(:no_discussions) %></div>
+    	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + h(prototype.name), :id => h(prototype.name)) %>
+    	<% if prototype.discussions.length == 0 %>
+      		<div><%= l(:no_discussions) %></div>
 		<% else %>
-      <% prototype.discussions.each do |discussion| %>
-        <%  discussion_text = '' %>
-        <% discussion["entries"].each do |entry| %>
-          <%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
-        <% end %>
-				<div id="prototype_<%= prototype.id %>_<%= discussion.id %>" class="contextual" style="padding-bottom:20px">
-	        <%= link_to l(:new_issue_from_discussion), 
-	          {:controller => :issues, :action => 'new', :project_id => @project, 
-	          :issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')', :description => discussion_text}} %>
-				</div>
-				<%= content_tag(:h5, h(discussion.title)) %>
-					<ul>
-						<% discussion.entries.each do |entry| %>
-							<li>
-								<%= h format_time(Time.at(entry["timestamp"]/1000)) %>, <%= l(:by) %>
-								<strong><%= h entry["author"] %></strong>: 
-								<%= h entry["text"] %>
-							</li>
-		        <% end %>
-					</ul>
+  			<% prototype.page_names.each do |page| %>
+				<%= content_tag(:h3, h(page[1])) %>
+	      		<% prototype.discussions.each do |discussion| %>
+					<% if discussion.page_id == page[0] %>
+		        		<%  discussion_text = '' %>
+		        		<% discussion["entries"].each do |entry| %>
+		          			<%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
+		        		<% end %>
+						<div id="prototype_<%= prototype.id %>_<%= discussion.id %>" class="contextual" style="padding-bottom:20px">
+			        		<%= link_to l(:new_issue_from_discussion), 
+			          			{:controller => :issues, :action => 'new', :project_id => @project, 
+			          			:issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')', 
+								:description => discussion_text}} %>
+						</div>
+						<%= content_tag(:h4, l(:Discussion) + ": " + h(discussion.title)) %>
+						<ul>
+							<% discussion.entries.each do |entry| %>
+								<li>
+									<small><%= h format_time(Time.at(entry["timestamp"]/1000)) %>, <%= l(:by) %>
+									<%= h entry["author"] %>:</small><br/> 
+									<%= h entry["text"] %>
+								</li>
+			        		<% end %>
+						</ul>
+					<% end %>
 	      
+				<% end %>
 			<% end %>
-    <% end %>
+    	<% end %>
 	</div>
 <% end %>

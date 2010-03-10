@@ -2,3 +2,11 @@
         background-image: url(../images/jstoolbar/bt_page_png.png);
 }
 
+div.pidoco_box h3 {
+	background: url(../images/jstoolbar/bt_page_png.png) no-repeat;
+	padding-left: 20px;
+}
+
+dt.discussion {
+    background-image: url(../images/jstoolbar/bt_page_png.png);
+}
