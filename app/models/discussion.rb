@@ -13,7 +13,7 @@ class Discussion < ActiveRecord::Base
   
   acts_as_event(
     :author => l(:via_pidoco_API), 
-    :datetime => Proc.new {|o| Time.at(o.last_entry[0..-4].to_i).to_datetime},
+    :datetime => :last_entry,#Proc.new {|o| Time.at(o.last_entry[0..-4].to_i).to_datetime},
     :title => Proc.new {|o| l(:Discussion) + " #{o.title}"},
     :url => Proc.new {|o| {
       :controller => 'discussions', 
@@ -21,7 +21,7 @@ class Discussion < ActiveRecord::Base
       :project => o.project,
       :anchor => "prototype_#{o.prototype_id}_#{o.id}"}},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
-  acts_as_activity_provider :timestamp => "#{table_name}.created_at", :find_options => {:include => {:pidoco_key, :project}}
+  acts_as_activity_provider :timestamp => "#{table_name}.last_entry", :find_options => {:include => {:pidoco_key, :project}}
 
   def after_find
     if self.prototype && self.pidoco_key
@@ -59,7 +59,7 @@ class Discussion < ActiveRecord::Base
     attributes[:page_id] = api_data["pageId"]
     attributes[:entries] = api_data["entries"]
     attributes[:timestamp] = api_data["timestamp"]
-    attributes[:last_entry] = api_data["lastEntryDate"]
+    attributes[:last_entry] = Time.at(api_data["lastEntryDate"].to_i/1000).to_datetime
     update_attributes(attributes)
   end
   
