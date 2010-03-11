@@ -12,12 +12,15 @@
 		        		<% discussion["entries"].each do |entry| %>
 		          			<%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
 		        		<% end %>
-						<div id="prototype_<%= prototype.id %>_<%= discussion.id %>" class="contextual" style="padding-bottom:20px">
-			        		<%= link_to l(:new_issue_from_discussion), 
-			          			{:controller => :issues, :action => 'new', :project_id => @project, 
-			          			:issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')', 
-								:description => discussion_text}} %>
-						</div>
+		
+						<% if @project.module_enabled?(:issue_tracking) %>
+							<div id="prototype_<%= prototype.id %>_<%= discussion.id %>" class="contextual" style="padding-bottom:20px">
+				        		<%= link_to l(:new_issue_from_discussion), 
+				          			{:controller => :issues, :action => 'new', :project_id => @project, 
+				          			:issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')', 
+									:description => discussion_text}} %>
+							</div>
+						<% end %>
 						<%= content_tag(:h4, l(:Discussion) + ": " + h(discussion.title)) %>
 						<ul>
 							<% discussion.entries.each do |entry| %>

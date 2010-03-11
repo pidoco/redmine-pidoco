@@ -17,7 +17,8 @@ de:
   Discussions_for: "Diskussionen für "
   Discussions_for_project: "Diskussionen zu Projekt "
   view_all_discussions: "Alle Diskussionen ansehen"
-  last_change_on: zuletzt geändert am
+  last_changed_on: zuletzt geändert am
+  last_entry_on: letzter Beitrag am
   prototype_reviews: Pidoco° Prototyp Reviews
   by: von
   via_pidoco_API: via pidoco° API

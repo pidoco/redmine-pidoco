@@ -8,7 +8,12 @@ class PidocoKeysController < ApplicationController
   
   def create
     if request.post? 
-      @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
+      require 'pp'
+      pp params[:pidoco_key][:key]
+      key = params[:pidoco_key][:key]
+      key = $1 if /api_key=([\w\d]+)/.match(key)
+      pp key
+      @pidoco_key = PidocoKey.new(({:key => key}).merge(:project => @project))
       if @pidoco_key.save
         flash[:notice] = l(:notice_successful_create)
         redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'

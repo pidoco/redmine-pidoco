@@ -9,10 +9,21 @@
 	          :controller => :discussions, 
 	          :action => :index, 
 	          :project => @project, 
-	          :anchor => h("prototype_#{prototype.id}")) %>:
-      		<%= Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id}).length%> <%= l(:discussions)%>,
-			  <% time = Time.at(Integer(prototype.last_modified)/1000) %>
-				<%= l(:last_change_on) %> <%= format_time(time) %>
+	          :anchor => h("prototype_#{prototype.id}")) %>: <%= l(:last_changed_on) %> <%= format_time(Time.at(Integer(prototype.last_modified)/1000)) %><br/>
+	
+				<% discussions = Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id})
+				lastDiscussed = Time.at(0)
+				discussions.each do |discussion|
+					if lastDiscussed < discussion[:last_discussed_at]
+						lastDiscussed = discussion[:last_discussed_at]
+					end
+				end %>
+	
+				<% if discussions.length > 0 %>
+	      			<%= discussions.length%> <%= l(:discussions)%>, <%= l(:last_entry_on) %> <%= format_time(lastDiscussed) %>
+				<% else %>
+					<%= l(:no_discussions) %>
+				<% end %>
  			</li>
 			<% end %>
 	<% end %>
