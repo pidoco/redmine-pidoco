@@ -30,11 +30,12 @@
 	</ul>
 	<% if no_prototypes %>
 		<%= l(:no_prototypes_available) %>
+	<% else %>
+		<%= link_to(l(:view_all_discussions), 
+	      :controller => :discussions, 
+	      :action => :index, 
+	      :project => @project) %>
 	<% end%>
-	<%= link_to(l(:view_all_discussions), 
-      :controller => :discussions, 
-      :action => :index, 
-      :project => @project) %>
 </div>
 
 <% content_for :header_tags do %>

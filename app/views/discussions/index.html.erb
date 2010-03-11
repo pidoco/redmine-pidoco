@@ -38,3 +38,7 @@
     	<% end %>
 	</div>
 <% end %>
+
+<% if @prototypes.length == 0 %>
+	<%= l(:no_prototypes_available)%>
+<% end %>
