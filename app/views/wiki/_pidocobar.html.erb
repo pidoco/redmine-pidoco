@@ -1,4 +1,11 @@
 <% if @project %>
+	<% default_settings = Redmine::Plugin.find(:redmine_pidoco).settings[:default] 
+		base_url = default_settings["SSL"] ? 
+			"https://" + default_settings["HOST"] : 
+			"http://" + default_settings["HOST"] + ":" + default_settings["PORT"].to_s
+		base_url += default_settings["URI_PREFIX"]
+	%>
+
   <script type="text/javascript">
 
   // TODO Licensing
@@ -83,8 +90,9 @@
   	    try {
       	    Element.remove('pidoco_select');
   	    } catch(e) {}
-  	    var url = "https://pidoco.com/rabbit/api/";
-  	    window.toolbar.singleTag("!" + url + "prototypes/" + uri_part + ".png?api_key=" + key + "!", " ");
+  	    var url = '<%= base_url%>';
+		// insert textile image that links to the sketched xhtml
+  	    window.toolbar.singleTag("!" + url + "prototypes/" + uri_part + ".png?api_key=" + key + "!:" + url + "prototypes/" + uri_part + ".xhtml?api_key=" + key + "&mode=sketched", " ");
   	}
 	
   }
