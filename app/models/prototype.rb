@@ -64,19 +64,9 @@ class Prototype < ActiveRecord::Base
         when Net::HTTPSuccess
           id_list = JSON.parse(res.body)
           result = []
-          prototypes = self.find(:all, :conditions => {:pidoco_key_id => pidoco_key})
           
-          # remove prototypes that are not in the id list
-          prototypes.each do |prototype|
-            id_found = false
-            id_list.each do |id|
-              if prototype.id == id
-                id_found = true
-                break
-              end
-            end
-            prototype.destroy unless id_found
-          end
+          # delete all prototypes that are not in the id list
+          self.destroy_all(["id NOT IN (?) AND pidoco_key_id = ?", id_list, pidoco_key])
           
           # create prototypes that are not yet in the database
           id_list.each do |id|

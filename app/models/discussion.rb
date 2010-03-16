@@ -73,18 +73,9 @@ class Discussion < ActiveRecord::Base
         when Net::HTTPSuccess
           id_list = JSON.parse(res.body)
           result = []
-          discussions = self.find(:all, :conditions => {:pidoco_key_id => pidoco_key, :prototype_id => prototype.id})
+
           # remove prototypes that are not in the id list
-          discussions.each do |discussion|
-            id_found = false
-            id_list.each do |id|
-              if discussion.id == id
-                id_found = true
-                break
-              end
-            end
-            discussion.destroy unless id_found
-          end
+          Discussion.destroy_all(["id NOT IN (?) AND pidoco_key_id = ? AND prototype_id = ?", id_list, pidoco_key, prototype.id])
 
           id_list.each do |id|
             unless self.exists? id
