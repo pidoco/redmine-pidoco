@@ -18,7 +18,7 @@ class Discussion < ActiveRecord::Base
     :url => Proc.new {|o| {
       :controller => 'discussions', 
       :action => 'index', 
-      :project => o.project,
+      :project => o.project.identifier,
       :anchor => "prototype_#{o.prototype_id}_#{o.id}"}},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
   acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", :find_options => {:include => {:pidoco_key, :project}}
