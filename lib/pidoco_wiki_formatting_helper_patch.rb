@@ -3,11 +3,11 @@ module PidocoWikiFormattingHelperPatch
     base.send(:include, InstanceMethods)
     
     base.class_eval do
-      alias_method_chain :wikitoolbar_for, :pidoco_wikitoolbar
+      alias_method_chain :wikitoolbar_for, :pidoco
     end
   end
   module InstanceMethods
-    def wikitoolbar_for_with_pidoco_wikitoolbar(field_id)
+    def wikitoolbar_for_with_pidoco(field_id)
       if @project and @project.module_enabled?(:pidoco)
         help_link = l(:setting_text_formatting) + ': ' +
           link_to(l(:label_help), compute_public_path('wiki_syntax', 'help', 'html'),
@@ -21,7 +21,7 @@ module PidocoWikiFormattingHelperPatch
           javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language}") +
           javascript_tag("var toolbar = new jsToolBar($('#{field_id}')); toolbar.setHelpLink('#{help_link}'); toolbar.draw();")
       else
-        wikitoolbar_for_without_pidoco_wikitoolbar(field_id)
+        wikitoolbar_for_without_pidoco(field_id)
       end
     end
   end
