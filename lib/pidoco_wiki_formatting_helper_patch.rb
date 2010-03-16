@@ -16,11 +16,12 @@ module PidocoWikiFormattingHelperPatch
           link_to(l(:label_help), url,
                   :onclick => "window.open(\"#{ url }\", \"\", \"resizable=yes, location=no, width=300, height=640, menubar=no, status=no, scrollbars=yes\"); return false;")
     
-        javascript_include_tag('jstoolbar/jstoolbar') +
+        stylesheet_link_tag("pidoco", :plugin => 'redmine_pidoco') +
+          javascript_include_tag('jstoolbar/jstoolbar') +
           javascript_include_tag('jstoolbar/textile') +
           render(:partial => 'wiki/pidocobar') +
           javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}") +
-        javascript_tag("var wikiToolbar = new jsToolBar($('#{field_id}')); wikiToolbar.setHelpLink('#{help_link}'); wikiToolbar.draw();")
+          javascript_tag("var wikiToolbar = new jsToolBar($('#{field_id}')); wikiToolbar.setHelpLink('#{help_link}'); wikiToolbar.draw();")
       else
         wikitoolbar_for_without_pidoco(field_id)
       end
