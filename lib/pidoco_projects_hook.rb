@@ -1,7 +1,5 @@
 class PidocoProjectsHook < Redmine::Hook::ViewListener
   def view_projects_show_left(context = {})
-    require 'pp'
-    pp context[:project]
     if context[:project].module_enabled?(:pidoco)
       context[:controller].send(
           :render_to_string,

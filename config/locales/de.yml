@@ -3,14 +3,14 @@ de:
   prototype: Prototyp
   Prototype: "Prototyp "
   no_discussions: Es gibt derzeit keine Diskussionen.
-  no_prototypes_available: Zu diesem Projekt gibt es derzeit keine Prototypen.
+  no_prototypes_available: Zu diesem Projekt gibt es derzeit keine Prototypen. Sie müssen einen API-Key in den Pidoco Einstellungen hinzufügen.
   new_issue_from_discussion: Erzeuge ein Ticket aus dieser Diskussion.
-  waiting_for_pidoco: Warte auf den pidoco° Server…
-  prototypes_for_project: Pidoco° Prototypen für dieses Projekt
+  waiting_for_pidoco: Warte auf den pidoco°-Server…
+  prototypes_for_project: Pidoco°-Prototypen für dieses Projekt
   goto_repository: Zum Repository
-  field_key: pidoco° API Key
-  edit_pidoco_key: Editiere pidoco° API Key
-  new_pidoco_key: Neuen pidoco° API Key hinzufügen
+  field_key: pidoco° API-Key
+  edit_pidoco_key: Editiere pidoco° API-Key
+  new_pidoco_key: Neuen pidoco° API-Key hinzufügen
   notice_create_failed: Hizufügen fehlgeschlagen.
   discussions: Diskussionen
   Discussion: Diskussion
@@ -23,6 +23,6 @@ de:
   by: von
   via_pidoco_API: via pidoco° API
   review_of_prototype: "Review zu Prototyp "
-  embed_page: "Füge ein Bild einer Prototyp Seite ein"
+  embed_page: "Füge ein Bild einer Prototyp-Seite ein"
   pidoco_cache_cleared: "Cache geleert."
-  clear_pidoco_cache: "Leere den Prototyp und Diskussions Cache"
+  clear_pidoco_cache: "Leere den Prototyp und Diskussions-Cache"

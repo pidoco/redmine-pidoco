@@ -1,6 +1,6 @@
 <% @prototypes.each do |prototype| %>
 	<div id="prototype_<%= prototype.id %>" style="margin-bottom:20px">
-    	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + h(prototype.name), :id => h(prototype.name)) %>
+    	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + "'" + h(prototype.name) + "'", :id => h(prototype.name)) %>
     	<% if prototype.discussions.length == 0 %>
       		<div><%= l(:no_discussions) %></div>
 		<% else %>
