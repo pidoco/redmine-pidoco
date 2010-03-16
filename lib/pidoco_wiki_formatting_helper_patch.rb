@@ -9,17 +9,18 @@ module PidocoWikiFormattingHelperPatch
   module InstanceMethods
     def wikitoolbar_for_with_pidoco(field_id)
       if @project and @project.module_enabled?(:pidoco)
+        # Is there a simple way to link to a public resource?
+        url = "#{Redmine::Utils.relative_url_root}/help/wiki_syntax.html"
+        
         help_link = l(:setting_text_formatting) + ': ' +
-          link_to(l(:label_help), compute_public_path('wiki_syntax', 'help', 'html'),
-                  :onclick => "window.open(\"#{ compute_public_path('wiki_syntax', 'help', 'html') }\", \"\", \"resizable=yes, location=no, width=300, height=640, menubar=no, status=no, scrollbars=yes\"); return false;")
-
-        stylesheet_link_tag("pidoco", :plugin => 'redmine_pidoco') +
-          javascript_include_tag('jstoolbar/jstoolbar') +
+          link_to(l(:label_help), url,
+                  :onclick => "window.open(\"#{ url }\", \"\", \"resizable=yes, location=no, width=300, height=640, menubar=no, status=no, scrollbars=yes\"); return false;")
+    
+        javascript_include_tag('jstoolbar/jstoolbar') +
           javascript_include_tag('jstoolbar/textile') +
           render(:partial => 'wiki/pidocobar') +
-          #javascript_include_tag("pidocobar", :plugin => 'redmine_pidoco') +
-          javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language}") +
-          javascript_tag("var toolbar = new jsToolBar($('#{field_id}')); toolbar.setHelpLink('#{help_link}'); toolbar.draw();")
+          javascript_include_tag("jstoolbar/lang/jstoolbar-#{current_language.to_s.downcase}") +
+        javascript_tag("var wikiToolbar = new jsToolBar($('#{field_id}')); wikiToolbar.setHelpLink('#{help_link}'); wikiToolbar.draw();")
       else
         wikitoolbar_for_without_pidoco(field_id)
       end
