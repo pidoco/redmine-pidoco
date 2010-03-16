@@ -7,7 +7,7 @@ class Discussion < ActiveRecord::Base
   include PidocoRequest
   
   belongs_to :pidoco_key # this is is redundant information... on the other hand: prototype means querying the api!
-  belongs_to :project, :through => :pidoco_key
+  has_one :project, :through => :pidoco_key
   belongs_to :prototype
   serialize :entries
   after_create :refresh_from_api_if_necessary
