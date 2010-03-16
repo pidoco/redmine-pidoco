@@ -5,9 +5,13 @@
       		<div><%= l(:no_discussions) %></div>
 		<% else %>
   			<% prototype.page_names.each do |page| %>
-				<%= content_tag(:h3, h(page[1])) %>
+				<% first_iteration = true %>
 	      		<% prototype.discussions.each do |discussion| %>
 					<% if discussion.page_id == page[0] %>
+						<% if first_iteration %>
+							<%= content_tag(:h3, h(page[1])) %>
+							<% first_iteration = false %>
+						<% end %>
 		        		<%  discussion_text = '' %>
 		        		<% discussion["entries"].each do |entry| %>
 		          			<%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>

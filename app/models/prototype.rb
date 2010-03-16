@@ -7,7 +7,7 @@ class Prototype < ActiveRecord::Base
   include PidocoRequest
   
   belongs_to :pidoco_key
-  has_many :discussions
+  has_many :discussions, :dependent => :destroy
   serialize :page_names
   after_create :refresh_from_api_if_necessary
 
@@ -64,6 +64,21 @@ class Prototype < ActiveRecord::Base
         when Net::HTTPSuccess
           id_list = JSON.parse(res.body)
           result = []
+          prototypes = self.find(:all, :conditions => {:pidoco_key_id => pidoco_key})
+          
+          # remove prototypes that are not in the id list
+          prototypes.each do |prototype|
+            id_found = false
+            id_list.each do |id|
+              if prototype.id == id
+                id_found = true
+                break
+              end
+            end
+            prototype.destroy unless id_found
+          end
+          
+          # create prototypes that are not yet in the database
           id_list.each do |id|
             unless self.exists? id
               p = self.new()

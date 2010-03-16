@@ -4,7 +4,7 @@ class PidocoKey < ActiveRecord::Base
   # Not anymore! :)
 
   belongs_to :project
-  has_many :prototypes
+  has_many :prototypes, :dependent => :destroy
   validates_presence_of :key
 
 end

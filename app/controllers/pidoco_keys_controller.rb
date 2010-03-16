@@ -8,11 +8,9 @@ class PidocoKeysController < ApplicationController
   
   def create
     if request.post? 
-      require 'pp'
       pp params[:pidoco_key][:key]
       key = params[:pidoco_key][:key]
       key = $1 if /api_key=([\w\d]+)/.match(key)
-      pp key
       @pidoco_key = PidocoKey.new(({:key => key}).merge(:project => @project))
       if @pidoco_key.save
         flash[:notice] = l(:notice_successful_create)
@@ -36,6 +34,10 @@ class PidocoKeysController < ApplicationController
 
   def destroy
     @pidoco_key.destroy
+    
+    # clear the cache
+    Setting[:plugin_redmine_pidoco] = {}
+    
     redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
   end
   
