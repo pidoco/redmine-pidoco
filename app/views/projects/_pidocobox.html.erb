@@ -1,9 +1,9 @@
 <div class="pidoco_box box">
   <h3><%= l(:prototypes_for_project) %></h3>
 	<% no_prototypes = true %>
-  <% @project.pidoco_keys.each do |pidoco_key| %>
 	<ul>
-  	<% Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}).each do |prototype| %>
+	<% @project.pidoco_keys.each do |pidoco_key| %>
+	  	<% Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}).each do |prototype| %>
 			<% no_prototypes = false %>
 			<li><%= link_to(prototype.name, 
 	          :controller => :discussions, 
@@ -24,8 +24,8 @@
 				<% else %>
 					<%= l(:no_discussions) %>
 				<% end %>
-			<% end %>
-		</li>
+			</li>
+		<% end %>
 	<% end %>
 	</ul>
 	<% if no_prototypes %>
