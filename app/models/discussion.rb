@@ -7,6 +7,7 @@ class Discussion < ActiveRecord::Base
   include PidocoRequest
   
   belongs_to :pidoco_key # this is is redundant information... on the other hand: prototype means querying the api!
+  belongs_to :project, :through => :pidoco_key
   belongs_to :prototype
   serialize :entries
   after_create :refresh_from_api_if_necessary
@@ -29,12 +30,6 @@ class Discussion < ActiveRecord::Base
     end
   end
   
-  def project
-    # Returning the object raises an exception upon reloading the activity stream ("Association has no to_s method").
-    # The reason seems to be the broken eager loading on belongs_to associations?
-    self.pidoco_key.project.name
-  end
-
   def refresh_from_api_if_necessary
     uri = "prototypes/#{prototype_id}/discussions/#{id}.json"
     res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
