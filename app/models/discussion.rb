@@ -25,8 +25,11 @@ class Discussion < ActiveRecord::Base
   acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", :find_options => {:include => {:pidoco_key, :project}}
 
   def after_find
+    RAILS_DEFAULT_LOGGER.info('calling after_find')
     if self.prototype && self.pidoco_key
+      RAILS_DEFAULT_LOGGER.info('calling refresh_from_api_if_necessary')
       refresh_from_api_if_necessary
+      RAILS_DEFAULT_LOGGER.info('returning from refresh_from_api_if_necessary')
     end
   end
   
