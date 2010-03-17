@@ -24,15 +24,6 @@ class Discussion < ActiveRecord::Base
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
   acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", :find_options => {:include => {:pidoco_key, :project}}
 
-  def after_find
-    RAILS_DEFAULT_LOGGER.info('calling after_find')
-    if self.prototype && self.pidoco_key
-      RAILS_DEFAULT_LOGGER.info('calling refresh_from_api_if_necessary')
-      refresh_from_api_if_necessary
-      RAILS_DEFAULT_LOGGER.info('returning from refresh_from_api_if_necessary')
-    end
-  end
-  
   def refresh_from_api_if_necessary
     uri = "prototypes/#{prototype_id}/discussions/#{id}.json"
     res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
@@ -100,8 +91,14 @@ class Discussion < ActiveRecord::Base
   end
   
   def self.find_with_api(*args)
-    self.poll_if_necessary
-    self.find(*args)
+    should_update = self.poll_if_necessary
+    discussions = self.find(*args)
+    if should_update
+      discussions.each do |discussion|
+        discussion.refresh_from_api_if_necessary
+      end
+    end
+    discussions
   end
   
   

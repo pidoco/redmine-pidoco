@@ -11,12 +11,6 @@ class Prototype < ActiveRecord::Base
   serialize :page_names
   after_create :refresh_from_api_if_necessary
 
-  def after_find
-    if self.pidoco_key
-      refresh_from_api_if_necessary
-    end
-  end
-
   def refresh_from_api_if_necessary
     uri = "prototypes/#{id}.json"
     res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
@@ -94,8 +88,14 @@ class Prototype < ActiveRecord::Base
   end
   
   def self.find_with_api(*args)
-    self.poll_if_necessary
-    self.find(*args)
+    should_update = self.poll_if_necessary
+    prototypes = self.find(*args)
+    if should_update
+      prototypes.each do |prototype|
+        prototype.refresh_from_api_if_necessary
+      end
+    end
+    prototypes
   end
   
 end
