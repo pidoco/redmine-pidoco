@@ -22,9 +22,14 @@ class Prototype < ActiveRecord::Base
     res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
     case res
       when Net::HTTPSuccess
+        log_message = "single prototype modified "
+        log_message += res.body if res.body
+        RAILS_DEFAULT_LOGGER.info(log_message)
         api_data = JSON.parse(res.body)
         update_with_api_data(api_data)
       when Net::HTTPNotModified
+        log_message = "single prototype not modified"
+        RAILS_DEFAULT_LOGGER.info(log_message)
         return false
       when Net::HTTPForbidden
         delete
@@ -62,6 +67,9 @@ class Prototype < ActiveRecord::Base
       res = PidocoRequest::request_if_necessary(uri, pidoco_key)
       case res
         when Net::HTTPSuccess
+          log_message = "prototypes modified "
+          log_message += res.body if res.body
+          RAILS_DEFAULT_LOGGER.info(log_message)
           id_list = JSON.parse(res.body)
           result = []
           
@@ -78,6 +86,8 @@ class Prototype < ActiveRecord::Base
             end
           end
         when Net::HTTPNotModified
+          log_message = "prototypes not modified"
+          RAILS_DEFAULT_LOGGER.info(log_message)
           return false
       end
     end

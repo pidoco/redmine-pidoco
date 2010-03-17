@@ -25,6 +25,10 @@ module PidocoRequest
         "last_modified_" + request_uri => response['Last-Modified'],
         "date_" + request_uri => response['Date']
       )
+      log_message = "response for " + uri
+      log_message += " - " + last_mod if last_mod
+      log_message += " - " + response['Last-Modified'] if response['Last-Modified']
+      RAILS_DEFAULT_LOGGER.info(log_message)
       return response
     rescue Errno::ECONNREFUSED, Timeout::Error, SocketError => e
     # TODO: Not really sure which errors to check for here... but this seems to work at least.
