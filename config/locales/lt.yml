@@ -1,0 +1,28 @@
+'lt':
+  Pidoco: pidoco°
+  prototype: Prototype
+  Prototype: "Prototype "
+  no_discussions: There are currently no discussions.
+  no_prototypes_available: There are currently no prototypes available for this project. Add an API Key in the pidoco settings.
+  new_issue_from_discussion: Create a new issue from this discussion.
+  waiting_for_pidoco: Waiting for the pidoco° server…
+  prototypes_for_project: Pidoco° prototypes for this project
+  goto_repository: Go to your repository
+  field_key: pidoco° API Key
+  edit_pidoco_key: Edit pidoco° API Key
+  new_pidoco_key: New pidoco° API Key
+  notice_create_failed: Creation failed.
+  discussions: discussions
+  Discussion: Discussion
+  Discussions_for: "Discussions for "
+  Discussions_for_project: "Discussions for project "
+  view_all_discussions: "View all discussions"
+  last_changed_on: last changed on
+  last_entry_on: last entry on
+  prototype_reviews: pidoco° Prototype Reviews
+  by: by
+  via_pidoco_API: via pidoco° API
+  review_of_prototype: "Review of prototype "
+  embed_page: "Embed an image of a prototype page"
+  pidoco_cache_cleared: "Cache cleared."
+  clear_pidoco_cache: "Clear the prototype and discussion cache"
