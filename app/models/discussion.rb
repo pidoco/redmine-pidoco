@@ -29,7 +29,7 @@ class Discussion < ActiveRecord::Base
   
   acts_as_event(
     :author => l(:via_pidoco_API), 
-    :datetime => :last_discussed_at
+    :datetime => :last_discussed_at,
     :title => Proc.new {|o| l(:Discussion) + " #{o.title}"},
     :url => Proc.new {|o| {
       :controller => 'discussions', 
