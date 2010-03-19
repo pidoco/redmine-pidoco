@@ -52,5 +52,22 @@ module PidocoRequest
     end
   end
   
+  def request_uncached(uri, pidoco_key)
+    request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
+    request = Net::HTTP::Get.new(request_uri)
+    begin
+      http = Net::HTTP.new(HOST, PORT)
+      http.use_ssl = SSL
+      response = http.start {|session| session.request(request) }
+      log_message = "requesting " + uri + " (no caching)"
+      RAILS_DEFAULT_LOGGER.info(log_message)
+      return response
+    rescue Errno::ECONNREFUSED, Timeout::Error, SocketError => e
+    # TODO: Not really sure which errors to check for here... but this seems to work at least.
+      return nil
+    end
+  end
+  
   module_function :request_if_necessary
+  module_function :request_uncached
 end

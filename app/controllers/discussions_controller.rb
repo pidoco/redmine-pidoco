@@ -24,8 +24,7 @@ class DiscussionsController < ApplicationController
   menu_item :pidoco_menu
   
   def index
-    @prototypes = Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => @project.pidoco_keys})
-    @discussions = Discussion.find_with_api(:all, :conditions => {:prototype_id => @prototypes})
+    
   end
 
   private

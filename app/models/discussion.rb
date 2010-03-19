@@ -21,7 +21,6 @@ class Discussion < ActiveRecord::Base
 
   include PidocoRequest
   
-  belongs_to :pidoco_key # TODO this is redundant and could be designed better... 
   has_one :project, :through => :pidoco_key
   belongs_to :prototype
   serialize :entries
@@ -38,6 +37,10 @@ class Discussion < ActiveRecord::Base
       :anchor => "prototype_#{o.prototype_id}_#{o.id}"}},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
   acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", :find_options => {:include => {:pidoco_key, :project}}
+  
+  def pidoco_key
+    self.prototype.pidoco_keys.first
+  end
 
   def refresh_from_api_if_necessary
     uri = "prototypes/#{prototype_id}/discussions/#{id}.json"

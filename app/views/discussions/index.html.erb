@@ -1,4 +1,8 @@
-<% @prototypes.each do |prototype| %>
+<% no_prototypes = true %>
+<% @project.pidoco_keys.each do |pidoco_key| %>
+  <% if pidoco_key.prototype %>
+  <% no_prototypes = false %>
+  <% prototype = pidoco_key.prototype %>
 	<div id="prototype_<%= prototype.id %>" style="margin-bottom:20px">
     	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + "'" + h(prototype.name) + "'", :id => h(prototype.name)) %>
     	<% if prototype.discussions.length == 0 %>
@@ -41,8 +45,9 @@
 			<% end %>
     	<% end %>
 	</div>
+	<% end %>
 <% end %>
 
-<% if @prototypes.length == 0 %>
+<% if no_prototypes %>
 	<%= l(:no_prototypes_available)%>
 <% end %>

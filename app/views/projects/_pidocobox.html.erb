@@ -3,7 +3,8 @@
 	<% no_prototypes = true %>
 	<ul>
 	<% @project.pidoco_keys.each do |pidoco_key| %>
-	  	<% Prototype.find_with_api(:all, :conditions => {:pidoco_key_id => pidoco_key.id}).each do |prototype| %>
+	  <% prototype = pidoco_key.prototype %>
+	  <% if prototype %>
 			<% no_prototypes = false %>
 			<li><%= link_to(prototype.name, 
 	          :controller => :discussions, 

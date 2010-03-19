@@ -22,14 +22,18 @@ class Prototype < ActiveRecord::Base
 
   include PidocoRequest
   
-  belongs_to :pidoco_key
+  has_many :pidoco_keys
   has_many :discussions, :dependent => :destroy
   serialize :page_names
   after_create :refresh_from_api_if_necessary
-
+  
+  def pidoco_key
+    self.pidoco_keys.first
+  end
+  
   def refresh_from_api_if_necessary
     uri = "prototypes/#{id}.json"
-    res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_keys.first)
     case res
       when Net::HTTPSuccess
         log_message = "single prototype modified "
@@ -60,7 +64,7 @@ class Prototype < ActiveRecord::Base
   
   def get_page_names_from_api
     uri = "prototypes/#{self.id}/pages.json"
-    res = PidocoRequest::request_if_necessary(uri, pidoco_key)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_keys.first)
     case res
       when Net::HTTPSuccess
         page_names = JSON.parse(res.body)
@@ -103,7 +107,7 @@ class Prototype < ActiveRecord::Base
     end
   end
   
-  def self.find_with_api(*args)
+  def find_with_api(*args)
     should_update = self.poll_if_necessary
     prototypes = self.find(*args)
     if should_update
