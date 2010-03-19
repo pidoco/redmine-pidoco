@@ -18,11 +18,10 @@ require 'net/http'
 require 'json'
 
 class Discussion < ActiveRecord::Base
-  # TODO: Should probably refactor a BaseClass from this so all pidoco resources look the same
 
   include PidocoRequest
   
-  belongs_to :pidoco_key # this is is redundant information... on the other hand: prototype means querying the api!
+  belongs_to :pidoco_key # TODO this is redundant and could be designed better... 
   has_one :project, :through => :pidoco_key
   belongs_to :prototype
   serialize :entries
@@ -30,7 +29,7 @@ class Discussion < ActiveRecord::Base
   
   acts_as_event(
     :author => l(:via_pidoco_API), 
-    :datetime => :last_discussed_at,#Proc.new {|o| Time.at(o.last_entry[0..-4].to_i).to_datetime},
+    :datetime => :last_discussed_at
     :title => Proc.new {|o| l(:Discussion) + " #{o.title}"},
     :url => Proc.new {|o| {
       :controller => 'discussions', 
@@ -74,7 +73,7 @@ class Discussion < ActiveRecord::Base
   
   def self.poll_if_necessary
     # TODO: only consider keys for a specific project
-    Prototype.all.each do |prototype| # Not entirely sure over what to iterate here
+    Prototype.all.each do |prototype|
       pidoco_key = prototype.pidoco_key
       uri = "prototypes/#{prototype.id}/discussions.json"
       res = PidocoRequest::request_if_necessary(uri, pidoco_key)

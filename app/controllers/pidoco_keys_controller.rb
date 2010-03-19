@@ -42,7 +42,6 @@ class PidocoKeysController < ApplicationController
   end
 
   def update
-    # TODO I know I should PUT. No idea how, though. Probably need to fuzz with the routes?
     if request.post? && @pidoco_key.update_attributes(params[:pidoco_key])
       redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
     end
@@ -52,13 +51,14 @@ class PidocoKeysController < ApplicationController
     @pidoco_key.destroy
     
     # clear the cache
+    # TODO hack
     Setting[:plugin_redmine_pidoco] = {}
     
     redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
   end
   
   def clear_cache
-    # TODO Maybe this should not be possible for everyone, as soon as we go into production. :)
+    # TODO This should not be possible for everyone
     Setting[:plugin_redmine_pidoco] = {}
     flash[:notice] = l(:pidoco_cache_cleared)
     redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'

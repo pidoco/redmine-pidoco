@@ -18,7 +18,7 @@ require 'net/http'
 require 'json'
 
 class Prototype < ActiveRecord::Base
-  # TODO: Should probably refactor a BaseClass from this so all pidoco resources look the same
+  # TODO too much code duplication
 
   include PidocoRequest
   
