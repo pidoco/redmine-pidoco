@@ -1,4 +1,4 @@
-<% if @project %>
+<% if @project && @project.module_enabled?(:pidoco) %> %>
 	<% default_settings = Redmine::Plugin.find(:redmine_pidoco).settings[:default] 
 		base_url = default_settings["SSL"] ? 
 			"https://" + default_settings["HOST"] : 
