@@ -19,7 +19,7 @@ module PidocoWikiFormattingHelperPatch
     base.send(:include, InstanceMethods)
     
     base.class_eval do
-      alias_method_chain :wikitoolbar_for, :pidoco
+      alias_method_chain :wikitoolbar_for, :pidoco unless method_defined?(:wikitoolbar_for_without_pidoco)
     end
   end
   module InstanceMethods

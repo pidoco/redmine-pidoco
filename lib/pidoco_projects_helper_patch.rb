@@ -20,7 +20,7 @@ module PidocoProjectsHelperPatch
     
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-      alias_method_chain :project_settings_tabs, :pidoco_tab
+      alias_method_chain :project_settings_tabs, :pidoco_tab unless method_defined?(:project_settings_tabs_without_pidoco_tab)
     end
   end
 

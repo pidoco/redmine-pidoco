@@ -1,3 +1,13 @@
 = Pidoco° API Plugin
 
-#TODO
+This plugin connects Redmine with your prototypes from the pidoco° Prototype Creator (http://www.pidoco.com).
+
+== Installation
+
+To install the plugin copy the plugin folder to your redmine/vendor/plugins directory, run rake db:migrate:plugins and change the plugin settings like pidoco hostname and port in the init.rb file.
+
+== Usage
+
+Enable the pidoco° module in the settings of the project you want to import your prototypes in. The plugin has an own role which allows to enter new api access keys on the pidoco tab of the project settings page. Once you've entered a key, Redmine will automatically query all necessary information for the prototype associated with it from pidoco via HTTP and keep this information updated when needed. Note that the plugin uses HTTP caching to minimize network traffic on your server.
+
+Once prototypes have been loaded, they should appear in the pidoco box on the project's overview page. It is also possible to view discussions to a prototype and embed prototype pages into your wiki pages.

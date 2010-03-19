@@ -25,7 +25,6 @@ Redmine::Plugin.register :redmine_pidoco do
   
   project_module :pidoco do
     permission :manage_pidoco, {:pidoco_keys => [:new, :create, :edit, :update, :destroy, :clear_cache]}
-
     permission :pidoco, {:discussions => [:index]}, :public => true
   end
 
