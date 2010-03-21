@@ -31,9 +31,19 @@ class Prototype < ActiveRecord::Base
     self.pidoco_keys.first
   end
   
+  alias_method :real_discussions, :discussions
+  def discussions
+    should_update = Discussion.poll_if_necessary(self) if pidoco_key
+    d = real_discussions
+    if d && should_update
+      d.refresh_from_api_if_necessary
+    end
+    d
+  end
+  
   def refresh_from_api_if_necessary
     uri = "prototypes/#{id}.json"
-    res = PidocoRequest::request_if_necessary(uri, pidoco_keys.first)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key) if pidoco_key
     case res
       when Net::HTTPSuccess
         log_message = "single prototype modified "
@@ -64,7 +74,7 @@ class Prototype < ActiveRecord::Base
   
   def get_page_names_from_api
     uri = "prototypes/#{self.id}/pages.json"
-    res = PidocoRequest::request_if_necessary(uri, pidoco_keys.first)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key)
     case res
       when Net::HTTPSuccess
         page_names = JSON.parse(res.body)
@@ -75,6 +85,7 @@ class Prototype < ActiveRecord::Base
   end
 
   def self.poll_if_necessary
+    # TODO delete?
     # TODO: only consider keys for a specific project
     PidocoKey.all.each do |pidoco_key|
       uri = "prototypes.json"

@@ -74,37 +74,33 @@ class Discussion < ActiveRecord::Base
     update_attributes(attributes)
   end
   
-  def self.poll_if_necessary
-    # TODO: only consider keys for a specific project
-    Prototype.all.each do |prototype|
-      pidoco_key = prototype.pidoco_key
-      uri = "prototypes/#{prototype.id}/discussions.json"
-      res = PidocoRequest::request_if_necessary(uri, pidoco_key)
-      case res
-        when Net::HTTPSuccess
-          log_message = "discussions modified "
-          log_message += res.body if res.body
-          RAILS_DEFAULT_LOGGER.info(log_message)
-          id_list = JSON.parse(res.body)
-          result = []
+  def self.poll_if_necessary(prototype)
+    pidoco_key = prototype.pidoco_key
+    uri = "prototypes/#{prototype.id}/discussions.json"
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key)
+    case res
+      when Net::HTTPSuccess
+        log_message = "discussions modified "
+        log_message += res.body if res.body
+        RAILS_DEFAULT_LOGGER.info(log_message)
+        id_list = JSON.parse(res.body)
+        result = []
 
-          # remove prototypes that are not in the id list
-          Discussion.destroy_all(["id NOT IN (?) AND pidoco_key_id = ? AND prototype_id = ?", id_list, pidoco_key, prototype.id])
+        # remove discussions that are not in the id list
+        Discussion.destroy_all(["id NOT IN (?) AND prototype_id = ?", id_list, prototype.id])
 
-          id_list.each do |id|
-            unless self.exists? id
-              p = self.new()
-              p.id = id
-              p.pidoco_key_id = pidoco_key.id
-              p.prototype_id = prototype.id
-              p.save
-            end
+        id_list.each do |id|
+          unless self.exists? id
+            p = self.new()
+            p.id = id
+            p.prototype_id = prototype.id
+            p.save
           end
-        when Net::HTTPNotModified
-          log_message = "discussions not modified"
-          RAILS_DEFAULT_LOGGER.info(log_message)
-          return false
-      end
+        end
+      when Net::HTTPNotModified
+        log_message = "discussions not modified"
+        RAILS_DEFAULT_LOGGER.info(log_message)
+        return false
     end
   end
   

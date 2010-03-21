@@ -12,7 +12,7 @@
 	          :project => @project, 
 	          :anchor => h("prototype_#{prototype.id}")) %>: <%= l(:last_changed_on) %> <%= format_time(Time.at(Integer(prototype.last_modified)/1000)) %><br/>
 	
-				<% discussions = Discussion.find_with_api(:all, :conditions => {:prototype_id => prototype.id})
+				<% discussions = prototype.discussions
 				lastDiscussed = Time.at(0)
 				discussions.each do |discussion|
 					if lastDiscussed < discussion[:last_discussed_at]
