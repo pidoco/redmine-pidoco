@@ -28,7 +28,7 @@ module PidocoRequest
     date = Setting[:plugin_redmine_pidoco]["date_" + request_uri]
     # Don't request more than once every 60 seconds. Otherwise we would end up requesting the prototype too often
     # when displaying all discussions, e.g.
-    if date.try(:length) && ((Time.parse(date) + 60) > Time.now) && caching
+    if date.try(:length) && ((Time.parse(date) + 20) > Time.now) && caching
       log_message = "skipping request for " + uri + ", too frequent"
       RAILS_DEFAULT_LOGGER.info(log_message)
       return nil

@@ -1,16 +1,17 @@
 <% no_prototypes = true %>
 <% @project.pidoco_keys.each do |pidoco_key| %>
-  <% if pidoco_key.prototype %>
-  <% no_prototypes = false %>
   <% prototype = pidoco_key.prototype %>
+  <% if prototype %>
+  <% no_prototypes = false %>
+  <% discussions = prototype.discussions %>
 	<div id="prototype_<%= prototype.id %>" style="margin-bottom:20px">
     	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + "'" + h(prototype.name) + "'", :id => h(prototype.name)) %>
-    	<% if prototype.discussions.length == 0 %>
+    	<% if discussions.length == 0 %>
       		<div><%= l(:no_discussions) %></div>
 		<% else %>
   			<% prototype.page_names.each do |page| %>
 				<% first_iteration = true %>
-	      		<% prototype.discussions.each do |discussion| %>
+	      		<% discussions.each do |discussion| %>
 					<% if discussion.page_id == page[0] %>
 						<% if first_iteration %>
 							<%= content_tag(:h3, h(page[1])) %>
