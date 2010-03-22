@@ -96,6 +96,7 @@ class Discussion < ActiveRecord::Base
             p.save # after_create hook will get rest of the data
           end
         end
+        return true
       when Net::HTTPNotModified
         log_message = "discussions not modified"
         RAILS_DEFAULT_LOGGER.info(log_message)
@@ -113,7 +114,5 @@ class Discussion < ActiveRecord::Base
     end
     discussions
   end
-  
-  
   
 end

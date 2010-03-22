@@ -23,7 +23,6 @@ class PidocoProjectsHook < Redmine::Hook::ViewListener
           :locals => {:project => context[:project]})
     end
   end
-#  render_on :view_projects_show_left, :partial => "pidocobox" 
   
   # add pidoco icon to activity stream
   def view_layouts_base_html_head(context = {})
