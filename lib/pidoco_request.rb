@@ -21,7 +21,7 @@ module PidocoRequest
   SSL = default_settings["SSL"]||false
   URI_PREFIX = default_settings["URI_PREFIX"]
   
-  def request_if_necessary(uri, pidoco_key)
+  def request_if_necessary(uri, pidoco_key, caching=true)
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
     request = Net::HTTP::Get.new(request_uri)
     last_mod = Setting[:plugin_redmine_pidoco]["last_modified_" + request_uri]
@@ -31,7 +31,7 @@ module PidocoRequest
     if date.try(:length) && ((Time.parse(date) + 60) > Time.now)
       return nil
     end
-    request['If-Modified-Since'] = last_mod if last_mod
+    request['If-Modified-Since'] = last_mod if (last_mod && caching)
     begin
       http = Net::HTTP.new(HOST, PORT)
       http.use_ssl = SSL
@@ -48,26 +48,9 @@ module PidocoRequest
       return response
     rescue Errno::ECONNREFUSED, Timeout::Error, SocketError => e
     # TODO: Not really sure which errors to check for here... but this seems to work at least.
-      return nil
-    end
-  end
-  
-  def request_uncached(uri, pidoco_key)
-    request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
-    request = Net::HTTP::Get.new(request_uri)
-    begin
-      http = Net::HTTP.new(HOST, PORT)
-      http.use_ssl = SSL
-      response = http.start {|session| session.request(request) }
-      log_message = "requesting " + uri + " (no caching)"
-      RAILS_DEFAULT_LOGGER.info(log_message)
-      return response
-    rescue Errno::ECONNREFUSED, Timeout::Error, SocketError => e
-    # TODO: Not really sure which errors to check for here... but this seems to work at least.
-      return nil
+      return response || nil
     end
   end
   
   module_function :request_if_necessary
-  module_function :request_uncached
 end

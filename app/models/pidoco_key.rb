@@ -17,9 +17,9 @@
 class PidocoKey < ActiveRecord::Base
 
   belongs_to :project
-  belongs_to :prototype, :dependent => :destroy
-  validates_presence_of :key
-  after_create :get_prototype
+  belongs_to :prototype
+  validates_presence_of :key, :project
+  before_validation :fetch_prototype
   
   alias_method :real_prototype, :prototype
   def prototype
@@ -30,10 +30,10 @@ class PidocoKey < ActiveRecord::Base
     p
   end
   
-  def get_prototype
+  def fetch_prototype
     uri = "prototypes.json"
     # Request the prototype id without caching. We do not care if another key has the result cached.
-    res = PidocoRequest::request_uncached(uri, self) 
+    res = PidocoRequest::request_if_necessary(uri, self, caching=false) 
     case res
       when Net::HTTPSuccess
         log_message = "prototypes modified "
@@ -42,18 +42,12 @@ class PidocoKey < ActiveRecord::Base
         id_list = JSON.parse(res.body)
         result = []
 
-        # create prototypes that are not yet in the database or associate with existing
-        id_list.each do |id|
-          self.prototype_id = id
-          self.save
-          unless Prototype.exists? id
-            p = Prototype.new()
-            p.id = id
-            p.save
-          end
-        end
-      when Net::HTTPNotModified
-        log_message = "prototypes not modified"
+        # create prototype that is not yet in the database or associate with existing
+        self.prototype = Prototype.find_or_create_by_id(id_list.first) # currently the api should only return one prototype per key!        
+        self.prototype # invokes refresh_from_api_if_necessary
+      else
+        log_message = "error fetching prototypes "
+        log_message += res.body if res && res.body
         RAILS_DEFAULT_LOGGER.info(log_message)
         return false
     end # case

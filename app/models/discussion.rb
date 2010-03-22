@@ -24,7 +24,6 @@ class Discussion < ActiveRecord::Base
   has_one :project, :through => :pidoco_key
   belongs_to :prototype
   serialize :entries
-  after_create :refresh_from_api_if_necessary
   
   acts_as_event(
     :author => l(:via_pidoco_API), 
@@ -94,7 +93,7 @@ class Discussion < ActiveRecord::Base
             p = self.new()
             p.id = id
             p.prototype_id = prototype.id
-            p.save
+            p.save # after_create hook will get rest of the data
           end
         end
       when Net::HTTPNotModified
