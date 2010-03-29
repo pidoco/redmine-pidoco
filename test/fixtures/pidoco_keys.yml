@@ -2,8 +2,5 @@
 one:
   id: 1
   key: MyString
-  project_id: 
-two:
-  id: 2
-  key: MyString
-  project_id: 
+  project_id: 1
+  prototype_id: 1

@@ -4,7 +4,7 @@ class CreatePrototypes < ActiveRecord::Migration
       t.column :name, :string
       t.column :page_names, :text
       t.column :pidoco_key_id, :integer
-      t.column :last_modified, :string # TODO: this overflows!
+      t.column :last_modified, :string
       t.timestamps
     end
   end

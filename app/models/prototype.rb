@@ -70,7 +70,7 @@ class Prototype < ActiveRecord::Base
     attributes[:name] = api_data["prototypeData"]["name"]
     page_names = get_page_names_from_api
     attributes[:page_names] = page_names if page_names
-    attributes[:last_modified] = api_data["prototypeData"]["lastModification"]
+    attributes[:last_modified] = api_data["prototypeData"]["lastModification"].to_s
     update_attributes(attributes)
   end
   

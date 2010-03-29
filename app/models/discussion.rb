@@ -43,7 +43,7 @@ class Discussion < ActiveRecord::Base
 
   def refresh_from_api_if_necessary
     uri = "prototypes/#{prototype_id}/discussions/#{id}.json"
-    res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
+    res = request_if_necessary(uri, self.pidoco_key)
     case res
       when Net::HTTPSuccess
         log_message = "single discussion modified " + res.body
@@ -68,7 +68,7 @@ class Discussion < ActiveRecord::Base
     attributes[:prototype_id] = api_data["prototypeId"]
     attributes[:page_id] = api_data["pageId"]
     attributes[:entries] = api_data["entries"]
-    attributes[:timestamp] = api_data["timestamp"]
+    attributes[:timestamp] = api_data["timestamp"].to_s
     attributes[:last_discussed_at] = Time.at(api_data["lastEntryDate"].to_i/1000).to_datetime
     update_attributes(attributes)
   end
@@ -93,7 +93,7 @@ class Discussion < ActiveRecord::Base
             p = self.new()
             p.id = id
             p.prototype_id = prototype.id
-            p.save # after_create hook will get rest of the data
+            p.save # Protoype.discussions will call refresh_from_api_if_necessary and get rest of the data
           end
         end
         return true
