@@ -12,8 +12,4 @@
 <% end %>
 </tbody>
 </table>
-<p>
-<span style="float:right">
-  <%= link_to l(:clear_pidoco_cache), {:controller => 'pidoco_keys', :action => 'clear_cache', :project_id => @project} %>
-</span>
-<%= link_to l(:new_pidoco_key), {:controller => 'pidoco_keys', :action => 'new', :project_id => @project} %></p>
+<p><%= link_to l(:new_pidoco_key), {:controller => 'pidoco_keys', :action => 'new', :project_id => @project} %></p>
