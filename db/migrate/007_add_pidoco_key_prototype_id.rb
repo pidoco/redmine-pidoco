@@ -5,7 +5,7 @@ class AddPidocoKeyPrototypeId < ActiveRecord::Migration
       if prototype.pidoco_key
         prototype.pidoco_key.prototype_id = prototype.id
       else
-        prototype.delete
+        prototype.destroy
       end
     end
   end
