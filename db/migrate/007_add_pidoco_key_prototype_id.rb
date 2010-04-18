@@ -1,5 +1,8 @@
 class AddPidocoKeyPrototypeId < ActiveRecord::Migration
   def self.up
+    # TODO: remove this for final release (jsh)
+    Thread.current[:host_with_port] = "#{ENV['RAILS_ENV']}.plan.io:443"
+
     add_column :pidoco_keys, :prototype_id, :integer
     add_index :pidoco_keys, :prototype_id
     Setting[:plugin_redmine_pidoco] = {}
