@@ -8,11 +8,11 @@
   waiting_for_pidoco: Waiting for the pidoco° server…
   prototypes_for_project: Pidoco° prototypes for this project
   goto_repository: Go to your repository
-  field_key: pidoco° API Key
+  field_pidoco_key: pidoco° API Key
   edit_pidoco_key: Edit pidoco° API Key
   new_pidoco_key: New pidoco° API Key
   notice_create_failed: Creation failed.
-  discussions: discussions
+  label_discussion_plural: discussions
   Discussion: Discussion
   Discussions_for: "Discussions for "
   Discussions_for_project: "Discussions for project "

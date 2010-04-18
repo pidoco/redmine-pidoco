@@ -8,11 +8,11 @@ de:
   waiting_for_pidoco: Warte auf den pidoco°-Server…
   prototypes_for_project: Pidoco°-Prototypen für dieses Projekt
   goto_repository: Zum Repository
-  field_key: pidoco° API-Key
+  field_pidoco_key: pidoco° API-Key
   edit_pidoco_key: Editiere pidoco° API-Key
   new_pidoco_key: Neuen pidoco° API-Key hinzufügen
   notice_create_failed: Hizufügen fehlgeschlagen.
-  discussions: Diskussionen
+  label_discussion_plural: Diskussionen
   Discussion: Diskussion
   Discussions_for: "Diskussionen für "
   Discussions_for_project: "Diskussionen zu Projekt "

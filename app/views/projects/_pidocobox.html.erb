@@ -21,7 +21,7 @@
 				end %>
 	
 				<% if discussions.length > 0 %>
-	      			<%= discussions.length%> <%= l(:discussions)%>, <%= l(:last_entry_on) %> <%= format_time(lastDiscussed) %>
+	      			<%= discussions.length%> <%= l(:label_discussion_plural)%>, <%= l(:last_entry_on) %> <%= format_time(lastDiscussed) %>
 				<% else %>
 					<%= l(:no_discussions) %>
 				<% end %>

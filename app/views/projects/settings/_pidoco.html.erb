@@ -1,6 +1,6 @@
 <% if @project.pidoco_keys.any? %>
 	<table class="list">
-	<thead><th><%= l(:field_key) %></th><th></th></thead>
+	<thead><th><%= l(:field_pidoco_key) %></th><th></th></thead>
 	<tbody>
 	<% @project.pidoco_keys.each do |pidoco_key| %>
 		<tr class="<%= cycle 'odd', 'even' %>">
