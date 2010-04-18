@@ -1,6 +1,7 @@
 class AddPidocoKeyPrototypeId < ActiveRecord::Migration
   def self.up
     add_column :pidoco_keys, :prototype_id, :integer
+    add_index :pidoco_keys, :prototype_id
     Setting[:plugin_redmine_pidoco] = {}
     Prototype.all.each do |prototype|
       key = PidocoKey.find_by_id(prototype.pidoco_key_id)
