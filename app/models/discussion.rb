@@ -21,7 +21,6 @@ class Discussion < ActiveRecord::Base
 
   include PidocoRequest
   
-  has_one :project, :through => :pidoco_key
   belongs_to :prototype
   serialize :entries
   
@@ -31,12 +30,19 @@ class Discussion < ActiveRecord::Base
     :title => Proc.new {|o| l(:Discussion) + " #{o.title}"},
     :url => Proc.new {|o| {
       :controller => 'discussions', 
-      :action => 'index', 
-      :project => o.project.identifier,
+      :action => 'index',
       :anchor => "prototype_#{o.prototype_id}_#{o.id}"}},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
-  acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", :find_options => {:include => {:pidoco_key, :project}}
-  
+  acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", 
+    :find_options => {
+#      :include => [:prototype => {:pidoco_key => :project}],
+      :joins => [
+          "JOIN prototypes ON discussions.prototype_id = prototypes.id",
+          "JOIN pidoco_keys ON prototypes.id = pidoco_keys.prototype_id",
+          "JOIN projects ON pidoco_keys.project_id = projects.id",
+        ]
+    }
+
   def pidoco_key
     self.prototype.pidoco_keys.first
   end
