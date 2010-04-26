@@ -21,12 +21,13 @@ module PidocoRequest
   SSL = default_settings["SSL"]||false
   URI_PREFIX = default_settings["URI_PREFIX"]
   
-  def request_if_necessary(uri, pidoco_key, caching=true)
+  def request_if_necessary(uri, pidoco_key, resource_id="", caching=true)
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
+    caching_key = request_uri + resource_id.to_s # different resources share the same uri, so we have to append the id
     request = Net::HTTP::Get.new(request_uri)
-    last_mod = Setting[:plugin_redmine_pidoco]["last_modified_" + request_uri]
-    date = Setting[:plugin_redmine_pidoco]["date_" + request_uri]
-    # Don't request more than once every 60 seconds. Otherwise we would end up requesting the prototype too often
+    last_mod = Setting[:plugin_redmine_pidoco]["last_modified_" + caching_key]
+    date = Setting[:plugin_redmine_pidoco]["date_" + caching_key]
+    # Don't request more than once every 20 seconds. Otherwise we would end up requesting the prototype too often
     # when displaying all discussions, e.g.
     if date.try(:length) && ((Time.parse(date) + 20) > Time.now) && caching
       log_message = "skipping request for " + uri + ", too frequent"
@@ -40,8 +41,8 @@ module PidocoRequest
       response = http.start {|session| session.request(request) }
       # This looks unnecessarily complicated. But if you don't assign the setting with []=, Redmine will not persist it. :-(
       Setting[:plugin_redmine_pidoco] = Setting[:plugin_redmine_pidoco].merge(
-        "last_modified_" + request_uri => response['Last-Modified'],
-        "date_" + request_uri => response['Date']
+        "last_modified_" + caching_key => response['Last-Modified'],
+        "date_" + caching_key => response['Date']
       )
       log_message = "response for " + uri
       log_message += " - " + last_mod if last_mod

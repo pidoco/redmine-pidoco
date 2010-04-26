@@ -31,25 +31,28 @@ class Discussion < ActiveRecord::Base
     :url => Proc.new {|o| {
       :controller => 'discussions', 
       :action => 'index',
-      :anchor => "prototype_#{o.prototype_id}_#{o.id}"}},
-    :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name})
-  acts_as_activity_provider :timestamp => "#{table_name}.last_discussed_at", 
+      :anchor => "prototype_#{o.prototype_id}_#{o.id}"
+    }},
+    :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name}
+  )
+  acts_as_activity_provider(
+    :timestamp => "#{table_name}.last_discussed_at", 
     :find_options => {
-#      :include => [:prototype => {:pidoco_key => :project}],
-      :joins => [
-          "JOIN prototypes ON discussions.prototype_id = prototypes.id",
-          "JOIN pidoco_keys ON prototypes.id = pidoco_keys.prototype_id",
-          "JOIN projects ON pidoco_keys.project_id = projects.id",
-        ]
+      :include => { :prototype => { :pidoco_key => :project } }
     }
-
+  )
+  
   def pidoco_key
-    self.prototype.pidoco_keys.first
+    self.prototype.pidoco_key
+  end
+  
+  def project
+    self.pidoco_key.project
   end
 
   def refresh_from_api_if_necessary
-    uri = "prototypes/#{prototype_id}/discussions/#{id}.json"
-    res = request_if_necessary(uri, self.pidoco_key)
+    uri = "prototypes/#{prototype_id}/discussions/#{api_id}.json"
+    res = request_if_necessary(uri, self.pidoco_key, self.id)
     case res
       when Net::HTTPSuccess
         log_message = "single discussion modified " + res.body
@@ -71,7 +74,6 @@ class Discussion < ActiveRecord::Base
   def update_with_api_data(api_data)
     attributes = {}
     attributes[:title] = api_data["title"]
-    attributes[:prototype_id] = api_data["prototypeId"]
     attributes[:page_id] = api_data["pageId"]
     attributes[:entries] = api_data["entries"]
     attributes[:timestamp] = api_data["timestamp"].to_s
@@ -82,7 +84,7 @@ class Discussion < ActiveRecord::Base
   def self.poll_if_necessary(prototype)
     pidoco_key = prototype.pidoco_key
     uri = "prototypes/#{prototype.id}/discussions.json"
-    res = PidocoRequest::request_if_necessary(uri, pidoco_key)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key, prototype.id)
     case res
       when Net::HTTPSuccess
         log_message = "discussions modified "
