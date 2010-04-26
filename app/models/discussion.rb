@@ -30,26 +30,23 @@ class Discussion < ActiveRecord::Base
     :title => Proc.new {|o| l(:Discussion) + " #{o.title}"},
     :url => Proc.new {|o| {
       :controller => 'discussions', 
+      :project => o.project.identifier,
       :action => 'index',
       :anchor => "prototype_#{o.prototype_id}_#{o.id}"
     }},
     :description => Proc.new {|o| l(:review_of_prototype) + o.prototype.name}
   )
   acts_as_activity_provider(
-    :timestamp => "#{table_name}.last_discussed_at", 
+    :timestamp => "#{table_name}.last_discussed_at",
     :find_options => {
       :include => { :prototype => { :pidoco_key => :project } }
     }
   )
   
-  def pidoco_key
-    self.prototype.pidoco_key
+  def project
+    prototype.pidoco_key.project
   end
   
-  def project
-    self.pidoco_key.project
-  end
-
   def refresh_from_api_if_necessary
     uri = "prototypes/#{prototype_id}/discussions/#{api_id}.json"
     res = request_if_necessary(uri, self.pidoco_key, self.id)
