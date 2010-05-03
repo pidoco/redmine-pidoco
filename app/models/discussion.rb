@@ -48,8 +48,9 @@ class Discussion < ActiveRecord::Base
   end
   
   def refresh_from_api_if_necessary
-    uri = "prototypes/#{prototype_id}/discussions/#{api_id}.json"
-    res = request_if_necessary(uri, self.pidoco_key, self.id)
+    uri = "prototypes/#{prototype.api_id}/discussions/#{api_id}.json"
+    pidoco_key = prototype.pidoco_key
+    res = request_if_necessary(uri, pidoco_key, self.id) if pidoco_key
     case res
       when Net::HTTPSuccess
         log_message = "single discussion modified " + res.body
@@ -79,9 +80,9 @@ class Discussion < ActiveRecord::Base
   end
   
   def self.poll_if_necessary(prototype)
+    uri = "prototypes/#{prototype.api_id}/discussions.json"
     pidoco_key = prototype.pidoco_key
-    uri = "prototypes/#{prototype.id}/discussions.json"
-    res = PidocoRequest::request_if_necessary(uri, pidoco_key, prototype.id)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key, prototype.id) if pidoco_key
     case res
       when Net::HTTPSuccess
         log_message = "discussions modified "
@@ -91,15 +92,12 @@ class Discussion < ActiveRecord::Base
         result = []
 
         # remove discussions that are not in the id list
-        Discussion.destroy_all(["id NOT IN (?) AND prototype_id = ?", id_list, prototype.id])
+        Discussion.destroy_all(["api_id NOT IN (?) AND prototype_id = ?", id_list, prototype.id])
 
         id_list.each do |id|
-          unless self.exists? id
-            p = self.new()
-            p.id = id
-            p.prototype_id = prototype.id
-            p.save # Protoype.discussions will call refresh_from_api_if_necessary and get rest of the data
-          end
+          discussion = Discussion.find_or_create_by_api_id_and_prototype_id(id, prototype.id)
+          discussion.prototype_id = prototype.id
+          discussion.save # Protoype.discussions will call refresh_from_api_if_necessary and get rest of the data
         end
         return true
       when Net::HTTPNotModified

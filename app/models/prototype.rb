@@ -40,7 +40,7 @@ class Prototype < ActiveRecord::Base
   
   def refresh_from_api_if_necessary
     uri = "prototypes/#{api_id}.json"
-    res = PidocoRequest::request_if_necessary(uri, self.pidoco_key, self.id)
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key, id) if pidoco_key
     case res
       when Net::HTTPSuccess
         log_message = "single prototype modified "
@@ -75,9 +75,29 @@ class Prototype < ActiveRecord::Base
     res = PidocoRequest::request_if_necessary(uri, self.pidoco_key, self.id)
     case res
       when Net::HTTPSuccess
-        page_names = JSON.parse(res.body)
+        page_ids = JSON.parse(res.body)
+        if page_ids.class == Array
+          page_names = {}
+          page_ids.each do |page_id|
+            page_uri = "prototypes/#{self.api_id}/pages/#{page_id}.json"
+            # force a response as we update all page names at once
+            page_response = PidocoRequest::request_if_necessary(page_uri, self.pidoco_key, self.id, caching=false)
+            case page_response
+              when Net::HTTPSuccess
+                page_json = JSON.parse(page_response.body)
+                page_names[page_id] = page_json["name"]
+              else
+                page_names[page_id] = "unknown"
+            end
+          end
+        elsif page_ids.class == Hash
+          # old pidoco API (until 05/2010) returns an object of id-name pairs
+          page_names = page_ids
+        else
+          raise "Invalid response while getting page names."
+        end
       else
-        page_names = nil
+        return {}
     end
     page_names
   end

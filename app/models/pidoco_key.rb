@@ -43,9 +43,9 @@ class PidocoKey < ActiveRecord::Base
         log_message += res.body if res.body
         RAILS_DEFAULT_LOGGER.info(log_message)
         id_list = JSON.parse(res.body)
-        # create prototype that is not yet in the database or associate with existing
-        self.prototype = Prototype.find_or_create_by_api_id(id_list.first) # currently the api should only return one prototype per key!
-        self.save
+        self.prototype = Prototype.create!(:api_id => id_list.first)
+        self.save!
+        RAILS_DEFAULT_LOGGER.info("saved key")
         self.prototype # invokes refresh_from_api_if_necessary
       else
         log_message = "error fetching prototypes " + res if res
