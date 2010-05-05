@@ -20,7 +20,6 @@ require 'json'
 class DiscussionsController < ApplicationController
   unloadable
   before_filter :find_project, :check_project_privacy
-  #before_filter :find_apikey, :only => :discussions
   menu_item :pidoco_menu
   
   def index

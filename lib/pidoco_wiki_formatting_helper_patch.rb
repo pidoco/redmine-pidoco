@@ -24,6 +24,9 @@ module PidocoWikiFormattingHelperPatch
   end
   module InstanceMethods
     def wikitoolbar_for_with_pidoco(field_id)
+      
+      # jsh: WE NEED TO DISCUSS THIS :) THIS IS LIKELY TO BREAK IN FUTURE REDMINE VERSIONS... 
+      
       if @project and @project.module_enabled?(:pidoco)
         # Is there a simple way to link to a public resource?
         url = "#{Redmine::Utils.relative_url_root}/help/wiki_syntax.html"

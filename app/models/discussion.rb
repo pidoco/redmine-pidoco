@@ -53,13 +53,9 @@ class Discussion < ActiveRecord::Base
     res = request_if_necessary(uri, pidoco_key, self.id) if pidoco_key
     case res
       when Net::HTTPSuccess
-        log_message = "single discussion modified " + res.body
-        RAILS_DEFAULT_LOGGER.info(log_message)
         api_data = JSON.parse(res.body)
         update_with_api_data(api_data)
       when Net::HTTPNotModified
-        log_message = "single discussion not modified"
-        RAILS_DEFAULT_LOGGER.info(log_message)
         return false
       when Net::HTTPForbidden
         delete
@@ -70,6 +66,7 @@ class Discussion < ActiveRecord::Base
   end
   
   def update_with_api_data(api_data)
+    # jsh: why not update_attributes( :title => ..., :page_id => ..., ...) ?!
     attributes = {}
     attributes[:title] = api_data["title"]
     attributes[:page_id] = api_data["pageId"]
@@ -85,9 +82,6 @@ class Discussion < ActiveRecord::Base
     res = PidocoRequest::request_if_necessary(uri, pidoco_key, prototype.id) if pidoco_key
     case res
       when Net::HTTPSuccess
-        log_message = "discussions modified "
-        log_message += res.body if res.body
-        RAILS_DEFAULT_LOGGER.info(log_message)
         id_list = JSON.parse(res.body)
         result = []
 
@@ -104,6 +98,8 @@ class Discussion < ActiveRecord::Base
         log_message = "discussions not modified"
         RAILS_DEFAULT_LOGGER.info(log_message)
         return false
+
+        # jsh: what happens if res == nil, because of a comm error?
     end
   end
   
@@ -111,6 +107,7 @@ class Discussion < ActiveRecord::Base
     should_update = self.poll_if_necessary
     discussions = self.find(*args)
     if should_update
+      # jsh: this looks *very* expensive. can this be avoided? have you tested this with 100 discussions?
       discussions.each do |discussion|
         discussion.refresh_from_api_if_necessary
       end

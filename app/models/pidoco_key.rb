@@ -31,6 +31,11 @@ class PidocoKey < ActiveRecord::Base
       p.refresh_from_api_if_necessary
     end
     p
+
+    # jsh: the following should yield the same result but be slicker ;-)
+    # returning(real_prototype) do |p|
+    #   p.refresh_from_api_if_necessary if p
+    # end
   end
   
   def fetch_prototype
@@ -39,18 +44,12 @@ class PidocoKey < ActiveRecord::Base
     res = request_if_necessary(uri, self, self.id, caching=false) 
     case res
       when Net::HTTPSuccess
-        log_message = "prototypes modified "
-        log_message += res.body if res.body
-        RAILS_DEFAULT_LOGGER.info(log_message)
         id_list = JSON.parse(res.body)
         self.prototype = Prototype.create!(:api_id => id_list.first)
+        # jsh: if you use save!, you should also rescue a possible exception
         self.save!
-        RAILS_DEFAULT_LOGGER.info("saved key")
         self.prototype # invokes refresh_from_api_if_necessary
       else
-        log_message = "error fetching prototypes " + res if res
-        log_message += res.body if res && res.body
-        RAILS_DEFAULT_LOGGER.info(log_message)
         return false
     end # case
   end # def

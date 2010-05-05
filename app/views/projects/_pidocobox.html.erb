@@ -1,17 +1,18 @@
+<%# jsh: _ vs. - %>
 <div class="pidoco_box box">
   <h3><%= l(:prototypes_for_project) %></h3>
 	<% no_prototypes = true %>
 	<ul>
 	<% @project.pidoco_keys.each do |pidoco_key| %>
-	  <% prototype = pidoco_key.prototype %>
-	  <% if prototype %>
+	  <% if prototype = pidoco_key.prototype %>
 			<% no_prototypes = false %>
-			<li><%= link_to(prototype.name, 
+			<li><%= link_to(h(prototype.name), 
 	          :controller => :discussions, 
 	          :action => :index, 
 	          :project => @project, 
-	          :anchor => h("prototype_#{prototype.id}")) %>: <%= l(:last_changed_on) %> <%= format_time(Time.at(Integer(prototype.last_modified)/1000)) %><br/>
+	          :anchor => "prototype_#{prototype.id}") %>: <%= l(:last_changed_on) %> <%= format_time(Time.at(Integer(prototype.last_modified)/1000)) %><br/>
 	
+				<%# jsh: this should go into a helper %>
 				<% discussions = prototype.discussions
 				lastDiscussed = Time.at(0)
 				discussions.each do |discussion|
@@ -20,8 +21,8 @@
 					end
 				end %>
 	
-				<% if discussions.length > 0 %>
-	      			<%= discussions.length%> <%= l(:label_discussion_plural)%>, <%= l(:last_entry_on) %> <%= format_time(lastDiscussed) %>
+				<% if discussions.size > 0 %>
+	      			<%= discussions.size %> <%= l(:label_discussion_plural)%>, <%= l(:last_entry_on) %> <%= format_time(lastDiscussed) %>
 				<% else %>
 					<%= l(:no_discussions) %>
 				<% end %>

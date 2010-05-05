@@ -19,6 +19,7 @@ require 'json'
 
 class Prototype < ActiveRecord::Base
   # TODO too much code duplication
+  # jsh: ;-)
 
   include PidocoRequest
   
@@ -29,6 +30,8 @@ class Prototype < ActiveRecord::Base
   alias_method :real_discussions, :discussions
   def discussions
     should_update = Discussion.poll_if_necessary(self)
+
+    # jsh: can be beautified using returning 
     items = real_discussions
     if should_update
       items.each do |discussion|
@@ -43,15 +46,10 @@ class Prototype < ActiveRecord::Base
     res = PidocoRequest::request_if_necessary(uri, pidoco_key, id) if pidoco_key
     case res
       when Net::HTTPSuccess
-        log_message = "single prototype modified "
-        log_message += res.body if res.body
-        RAILS_DEFAULT_LOGGER.info(log_message)
         api_data = JSON.parse(res.body)
         update_with_api_data(api_data)
         return true
       when Net::HTTPNotModified
-        log_message = "single prototype not modified"
-        RAILS_DEFAULT_LOGGER.info(log_message)
         return false
       when Net::HTTPForbidden
         delete
@@ -94,6 +92,7 @@ class Prototype < ActiveRecord::Base
           # old pidoco API (until 05/2010) returns an object of id-name pairs
           page_names = page_ids
         else
+          # jsh: this exception is never rescued! this must fail silently or a bad response from pidoco can break planio.
           raise "Invalid response while getting page names."
         end
       else

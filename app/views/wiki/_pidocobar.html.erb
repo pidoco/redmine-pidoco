@@ -1,3 +1,7 @@
+
+<%# jsh: WE NEED TO DISCUSS THIS :) ARE YOU MONKEYPATCHING REDMINE's JS HERE? THIS IS LIKELY TO BREAK IN FUTURE REDMINE VERSIONS... %>
+<%# jsh: btw. wouldn't this be a great case for a pidocobar.js.erb ?? %>
+
 <% if @project && @project.module_enabled?(:pidoco) %>
 	<% default_settings = Redmine::Plugin.find(:redmine_pidoco).settings[:default] 
 		base_url = default_settings["SSL"] ? 
@@ -16,15 +20,21 @@
   	          var prototype = {};
   	          var pages = {};
   						<% @project.prototypes.each do |prototype| %>
+
+							<%# jsh: HTML escape!! %>
+
   						  prototype = { "id" : "<%= prototype.id%>", "name" : "<%= prototype.name%>", "key" : "<%= prototype.pidoco_key.key%>" };
   						  pages = {};
   						  <% prototype.page_names.keys.each do |pageId| %>
+								<%# jsh: HTML escape!! %>
+
   						    pages["<%= pageId %>"] = "<%= prototype.page_names[pageId] %>";
   						  <% end %>
   					    prototype["pages"] = pages;
   				      prototypes.push(prototype);
   						<% end %>
   						try {
+								<%# jsh: _ vs. - %>
             	    Element.remove('pidoco_select');
         	    } catch(e) {}
   						jsToolBar.prototype.elements.page_png.drawDropDown(prototypes);
@@ -32,13 +42,20 @@
   	},
   	drawDropDown: function(prototypes) {
   	    try {
+					<%# jsh: _ vs. - %>
+	
       	    Element.remove('pidoco_plugin_div');
   	    } catch(e) {}
   		// TODO: maybe move this dropdown right in the toolbar?
+			// jsh: +1 !! and then remove this comment :)
   	    var result = "<select id ='pidoco_select' name='pageId' onchange='jsToolBar.prototype.elements.page_png.insertPngLink( " +
-          	    "this.options[this.selectedIndex].value, " +
+				<%# jsh: HTML escape!! %>
+  	    "this.options[this.selectedIndex].value, " +
           	    "this.options[this.selectedIndex].parentNode.getAttribute(\"apikey\"))'>" +
+								<%# jsh: localization! %>
   	        "<option value='0'>Choose a page...</option>";
+
+						<%# jsh: HTML escape!! %>
   	    var t1 = new Template('<optgroup apikey="#{key}" style="font-weight:bold;" label="#{prototype}">');
   	    var t2 = new Template('<option value="#{prototype_id}/pages/#{id}">::#{name}</option>');
   	    for(var i=0; i < prototypes.length; i++) {
@@ -56,6 +73,8 @@
               }
   	    }
   	    result += "</select>";
+
+				<%# jsh: _ vs. - %>
   	    Element.insert(document.getElementsByClassName("jstb_page_png")[0], {after: result});
   	},
   	insertPngLink: function(uri_part, key) {
@@ -63,10 +82,14 @@
   	        return;
   	    }
   	    try {
+					<%# jsh: _ vs. - %>
       	    Element.remove('pidoco_select');
   	    } catch(e) {}
   	    var url = '<%= base_url%>';
 		// insert textile image that links to the sketched xhtml
+		<%# jsh: HTML escape!! %>
+		
+		
   	    window.wikiToolbar.singleTag("!" + url + "prototypes/" + uri_part + ".png?api_key=" + key + "!:" + url + "prototypes/" + uri_part + ".xhtml?api_key=" + key + "&mode=sketched", " ");
   	}
 	

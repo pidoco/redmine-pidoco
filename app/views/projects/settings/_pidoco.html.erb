@@ -5,7 +5,7 @@
 	<% @project.pidoco_keys.each do |pidoco_key| %>
 		<tr class="<%= cycle 'odd', 'even' %>">
 		<td><%= link_to_if_authorized h(pidoco_key.key), {:controller => 'pidoco_keys', :action => 'edit', :id => pidoco_key, :project_id => @project} %></td>
-		<td><%= link_to_if_authorized "", {:controller => 'pidoco_keys', :action => 'destroy', :project_id => @project, :id => pidoco_key}, :method => :post, :class => 'icon icon-del' %></td></tr>
+		<td><%= link_to_if_authorized '', {:controller => 'pidoco_keys', :action => 'destroy', :project_id => @project, :id => pidoco_key}, :method => :post, :class => 'icon icon-del' %></td></tr>
 	<% end %>
 <% else %>
 	<p class="nodata"><%= l(:label_no_data) %></p>

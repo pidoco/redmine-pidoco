@@ -32,6 +32,7 @@ end
 
 Redmine::Plugin.register :redmine_pidoco do
   name 'Redmine Pidoco Integration plugin'
+  # jsh: please add Pidoco GmbH (and maybe RR?)
   author 'Martin Kreichgauer'
   description 'This plugin integrates pidoco° with Redmine.'
   version '0.1'
@@ -47,6 +48,8 @@ Redmine::Plugin.register :redmine_pidoco do
   menu :project_menu, :pidoco_menu, { :controller => 'discussions', :action => 'index' }, :caption => 'Pidoco°', :after => :activity, :param => :project
   
   activity_provider :discussions
+
+  # jsh: would be nice if the svn could always contain pidoco.com instead of a localhost test server
   settings(:default => {
     "HOST" => 'localhost',
     "PORT" => 8180,
