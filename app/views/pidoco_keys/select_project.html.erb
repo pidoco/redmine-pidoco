@@ -1,0 +1,22 @@
+<h2><%=l(:label_project_plural)%></h2>
+
+
+<% if @projects.any? %>
+	<p class="nodata">
+		<%= t :pidoco_please_select_project %>
+	</p>
+	<%= render_project_hierarchy_for_pidoco_key(@projects, params[:pidoco_key]) %>
+	<p><em><%= t :pidoco_note_select_project %></em></p>
+<% end %>
+
+<% if User.current.logged? %>
+<p style="text-align:right;">
+<span class="my-project"><%= l(:label_my_projects) %></span>
+</p>
+<% end %>
+
+
+<% html_title(l(:label_project_plural)) -%>
+
+
+

@@ -24,3 +24,8 @@ de:
   via_pidoco_API: via pidoco° API
   review_of_prototype: "Review zu Prototyp "
   embed_page: "Füge ein Bild einer Prototyp-Seite ein"
+  pidoco_no_projects: "Es sind derzeit keine Projekte mit Wiki vorhanden, auf die Sie Zugriff haben."
+  pidoco_please_select_project: "Bitte wählen Sie das Projekt aus, mit dem Sie Ihren Pidoco° Prototyp verknüpfen möchten."
+  pidoco_note_select_project: "Bitte beachten Sie: Sie können Ihren Prototyp nur mit Planio Projekten verwenden, für die bereits ein Wiki angelegt wurde."
+  pidoco_key_assigned: Ihr Prototyp wurde mit Ihrem Projekt verknüpft. Sie können nun einzelne Seiten Ihres Prototyps in das Projekt-Wiki einbinden.
+  pidoco_key_assign_error: Leider konnte Ihr Protoyp nicht mit diesem Projekt verknüpft werden. Bitte wählen Sie ein anderes Projekt oder versuchen Sie es zu einem späteren Zeitpunkt erneut.

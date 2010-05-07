@@ -16,10 +16,34 @@
 
 class PidocoKeysController < ApplicationController
   unloadable
-  before_filter :find_project, :authorize
+  before_filter :find_project, :except => [:select_project]
+  before_filter :authorize, :except => [:select_project, :assign_to_project]
+  helper :pidoco
 
   def new
     @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
+  end
+  
+  def select_project
+    @projects = Project.visible.find(:all, :order => 'lft').select{ |p| p.wiki && User.current.allowed_to?(:edit_project, p) && User.current.allowed_to?(:edit_wiki_pages, p) }
+    flash[:error] = t(:pidoco_no_projects) if @projects.blank?
+  end
+  
+  def assign_to_project
+    if request.post?
+      begin
+        Project.transaction do 
+          @project.enabled_modules << EnabledModule.new(:name => 'pidoco')
+          key = @project.pidoco_keys.find_or_create_by_key params[:pidoco_key]
+          raise unless key.valid?
+        end
+        flash[:notice] = t(:pidoco_key_assigned)
+        redirect_to :controller => 'wiki', :action => 'index', :id => @project
+      rescue
+        flash[:error] = t(:pidoco_key_assign_error)
+        redirect_to :action => 'select_project', :pidoco_key => params[:pidoco_key]
+      end
+    end
   end
   
   def create
