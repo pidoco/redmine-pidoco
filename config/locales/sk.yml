@@ -1,5 +1,5 @@
 'sk':
-  Pidoco: pidoco°
+  Pidoco: Pidoco°
   prototype: Prototype
   Prototype: "Prototype "
   no_discussions: There are currently no discussions.
@@ -24,5 +24,8 @@
   via_pidoco_API: via pidoco° API
   review_of_prototype: "Review of prototype "
   embed_page: "Embed an image of a prototype page"
-  pidoco_cache_cleared: "Cache cleared."
-  clear_pidoco_cache: "Clear the prototype and discussion cache"
+  pidoco_no_projects: "There are no projects with wikis which you could access."
+  pidoco_please_select_project: "Please choose the project to which you would like to assign your Pidoco° protoype."
+  pidoco_note_select_project: "Please note: Only projects with wikis can be assigned a Pidoco° prototype."
+  pidoco_key_assigned: Your prototype has been assigned to your project. You can now embed prototype pages in the wiki.
+  pidoco_key_assign_error: Your prototype could not be assigned to the project. Please choose another project or try again later.
