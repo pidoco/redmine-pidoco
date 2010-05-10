@@ -5,8 +5,7 @@
   <% no_prototypes = false %>
   <% discussions = prototype.discussions %>
 
-	<%# jsh: HTML ids and classes should not contain _ but use - instead! http://devedge-temp.mozilla.org/viewsource/2001/css-underscores/ %>
-	<div id="prototype_<%= prototype.id %>" style="margin-bottom:20px">
+	<div id="prototype-<%= h prototype.id %>" style="margin-bottom:20px">
     	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + "'" + h(prototype.name) + "'", :id => h(prototype.name)) %>
     	<% if discussions.length == 0 %>
       		<div><%= l(:no_discussions) %></div>
@@ -21,18 +20,15 @@
 						<% end %>
 		        		<% discussion_text = '' %>
 		        		<% discussion["entries"].each do |entry| %>
-										<%# jsh: HTML escape!! %>
-		          			<%  discussion_text +=  entry["author"] + ': ' + entry["text"] + " | "%>
+		          			<%  discussion_text +=  h(entry["author"]) + ': ' + h(entry["text"]) + " | "%>
 		        		<% end %>
 		
 						<% if @project.module_enabled?(:issue_tracking) %>
-							<%# jsh: _ vs. - %>
-							<%# jsh: HTML escape!! %>
-							<div id="prototype_<%= prototype.id %>_<%= discussion.id %>" class="contextual" style="padding-bottom:20px">
+							<div id="prototype-<%= h prototype.id %>-<%= h discussion.id %>" class="contextual" style="padding-bottom:20px">
 				        		<%= link_to l(:new_issue_from_discussion), 
 				          			{:controller => :issues, :action => 'new', :project_id => @project, 
-				          			:issue => {:subject => discussion.title + ' (Prototype ' + prototype.name + ')', 
-									:description => discussion_text}} %>
+				          			:issue => {:subject => h(discussion.title) + ' (Prototype ' + h(prototype.name) + ')', 
+									:description => h(discussion_text)}} %>
 							</div>
 						<% end %>
 						<%= content_tag(:h4, l(:Discussion) + ": " + h(discussion.title)) %>

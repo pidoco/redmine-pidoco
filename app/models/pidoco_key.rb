@@ -26,32 +26,30 @@ class PidocoKey < ActiveRecord::Base
   
   alias_method :real_prototype, :prototype
   def prototype
-    p = real_prototype
-    if p
-      p.refresh_from_api_if_necessary
+    returning(real_prototype) do |p|
+      p.refresh_from_api_if_necessary if p
     end
-    p
-
-    # jsh: the following should yield the same result but be slicker ;-)
-    # returning(real_prototype) do |p|
-    #   p.refresh_from_api_if_necessary if p
-    # end
   end
   
   def fetch_prototype
     uri = "prototypes.json"
     # Request the prototype id without caching. We do not care if another key has the result cached.
-    res = request_if_necessary(uri, self, self.id, caching=false) 
+    res = request_if_necessary(uri, self, caching=false) 
     case res
       when Net::HTTPSuccess
-        id_list = JSON.parse(res.body)
-        self.prototype = Prototype.create!(:api_id => id_list.first)
-        # jsh: if you use save!, you should also rescue a possible exception
-        self.save!
-        self.prototype # invokes refresh_from_api_if_necessary
+        begin
+          id_list = JSON.parse(res.body)
+          self.prototype = Prototype.create!(:api_id => id_list.first)
+          self.save!
+          self.prototype # invokes refresh_from_api_if_necessary
+        rescue
+          RAILS_DEFAULT_LOGGER.warn "Could not create Prototype for key #{self.key}"
+          return false
+        end        
       else
+        RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was #{res.code}: #{res.body}"
         return false
-    end # case
-  end # def
+    end
+  end
 
 end

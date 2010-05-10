@@ -1,9 +1,8 @@
-/* jsh: _ vs. - */
-.jstb_page_png {
+.jstb_page_png { /* jstoolbar generates CSS classes with underscores */
         background-image: url(../images/jstoolbar/bt_page_png.png);
 }
 
-div.pidoco_box h3 {
+div.pidoco-box h3 {
 	background: url(../images/jstoolbar/bt_page_png.png) no-repeat;
 	padding-left: 20px;
 }

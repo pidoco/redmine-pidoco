@@ -32,10 +32,9 @@ end
 
 Redmine::Plugin.register :redmine_pidoco do
   name 'Redmine Pidoco Integration plugin'
-  # jsh: please add Pidoco GmbH (and maybe RR?)
-  author 'Martin Kreichgauer'
+  author 'Pidoco GmbH, ROCKET RENTALS GmbH'
   description 'This plugin integrates pidoco° with Redmine.'
-  version '0.1'
+  version '1.0'
   
   # require json gem
   config.gem 'json'
@@ -48,20 +47,19 @@ Redmine::Plugin.register :redmine_pidoco do
   menu :project_menu, :pidoco_menu, { :controller => 'discussions', :action => 'index' }, :caption => 'Pidoco°', :after => :activity, :param => :project
   
   activity_provider :discussions
-
-  # jsh: would be nice if the svn could always contain pidoco.com instead of a localhost test server
+  
+  # Production
   settings(:default => {
-    "HOST" => 'localhost',
-    "PORT" => 8180,
-    "SSL" => false,
+    "HOST" => 'pidoco.com',
+    "PORT" => 443,
+    "SSL" => true,
     "URI_PREFIX" => '/rabbit/api/'
   })
   
-#  settings(:default => {
-#    "HOST" => 'pidoco.com',
-#    "PORT" => 443,
-#    "SSL" => true,
-#    "URI_PREFIX" => '/rabbit/api/'
-#  })
-  
-end
+  # Local testing
+  #  settings(:default => {
+  #    "HOST" => 'localhost',
+  #   "PORT" => 8180,
+  #    "SSL" => false,
+  #    "URI_PREFIX" => '/rabbit/api/'
+  #  })

@@ -21,7 +21,7 @@ class PidocoKeysController < ApplicationController
   helper :pidoco
 
   def new
-    @pidoco_key = PidocoKey.new((params[:pidoco_key]||{}).merge(:project => @project))
+    @pidoco_key = PidocoKey.new :project => @project, :key => (params[:pidoco_key] || {}) 
   end
   
   def select_project
@@ -50,8 +50,7 @@ class PidocoKeysController < ApplicationController
     if request.post? 
       key = params[:pidoco_key][:key]
       key = $1 if /api_key=([\w\d]+)/.match(key)
-      # jsh: why not PidocoKey.new :key => key, :project => @project ?
-      @pidoco_key = PidocoKey.new(({:key => key}).merge(:project => @project))
+      @pidoco_key = PidocoKey.new :key => key, :project => @project
       if @pidoco_key.save
         flash[:notice] = l(:notice_successful_create)
         redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'

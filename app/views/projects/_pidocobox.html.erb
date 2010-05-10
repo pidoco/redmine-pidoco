@@ -1,5 +1,4 @@
-<%# jsh: _ vs. - %>
-<div class="pidoco_box box">
+<div class="pidoco-box box">
   <h3><%= l(:prototypes_for_project) %></h3>
 	<% no_prototypes = true %>
 	<ul>
@@ -10,22 +9,15 @@
 	          :controller => :discussions, 
 	          :action => :index, 
 	          :project => @project, 
-	          :anchor => "prototype_#{prototype.id}") %>: <%= l(:last_changed_on) %> <%= format_time(Time.at(Integer(prototype.last_modified)/1000)) %><br/>
-	
-				<%# jsh: this should go into a helper %>
-				<% discussions = prototype.discussions
-				lastDiscussed = Time.at(0)
-				discussions.each do |discussion|
-					if lastDiscussed < discussion[:last_discussed_at]
-						lastDiscussed = discussion[:last_discussed_at]
-					end
-				end %>
-	
-				<% if discussions.size > 0 %>
-	      			<%= discussions.size %> <%= l(:label_discussion_plural)%>, <%= l(:last_entry_on) %> <%= format_time(lastDiscussed) %>
-				<% else %>
-					<%= l(:no_discussions) %>
-				<% end %>
+	          :anchor => "prototype-#{prototype.id}") %>: <%= l(:last_changed_on) %> <%= format_time(Time.at(Integer(prototype.last_modified)/1000)) %><br/>
+
+    			<% discussions = prototype.discussions %>
+
+    			<% if discussions.size > 0 %>
+          			<%= discussions.size %> <%= l(:label_discussion_plural)%>, <%= l(:last_entry_on) %> <%= format_time(last_discussed_at(discussions)) %>
+    			<% else %>
+    				<%= l(:no_discussions) %>
+    			<% end %>
 			</li>
 		<% end %>
 	<% end %>

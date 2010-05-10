@@ -50,7 +50,7 @@ class Discussion < ActiveRecord::Base
   def refresh_from_api_if_necessary
     uri = "prototypes/#{prototype.api_id}/discussions/#{api_id}.json"
     pidoco_key = prototype.pidoco_key
-    res = request_if_necessary(uri, pidoco_key, self.id) if pidoco_key
+    res = request_if_necessary(uri, pidoco_key) if pidoco_key
     case res
       when Net::HTTPSuccess
         api_data = JSON.parse(res.body)
@@ -66,20 +66,19 @@ class Discussion < ActiveRecord::Base
   end
   
   def update_with_api_data(api_data)
-    # jsh: why not update_attributes( :title => ..., :page_id => ..., ...) ?!
-    attributes = {}
-    attributes[:title] = api_data["title"]
-    attributes[:page_id] = api_data["pageId"]
-    attributes[:entries] = api_data["entries"]
-    attributes[:timestamp] = api_data["timestamp"].to_s
-    attributes[:last_discussed_at] = Time.at(api_data["lastEntryDate"].to_i/1000).to_datetime
-    update_attributes(attributes)
+    update_attributes(
+      :title => api_data["title"],
+      :page_id => api_data["pageId"],
+      :entries => api_data["entries"],
+      :timestamp => api_data["timestamp"].to_s,
+      :last_discussed_at => Time.at(api_data["lastEntryDate"].to_i/1000).to_datetime
+    )
   end
   
   def self.poll_if_necessary(prototype)
     uri = "prototypes/#{prototype.api_id}/discussions.json"
     pidoco_key = prototype.pidoco_key
-    res = PidocoRequest::request_if_necessary(uri, pidoco_key, prototype.id) if pidoco_key
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key) if pidoco_key
     case res
       when Net::HTTPSuccess
         id_list = JSON.parse(res.body)
@@ -101,18 +100,6 @@ class Discussion < ActiveRecord::Base
 
         # jsh: what happens if res == nil, because of a comm error?
     end
-  end
-  
-  def self.find_with_api(*args)
-    should_update = self.poll_if_necessary
-    discussions = self.find(*args)
-    if should_update
-      # jsh: this looks *very* expensive. can this be avoided? have you tested this with 100 discussions?
-      discussions.each do |discussion|
-        discussion.refresh_from_api_if_necessary
-      end
-    end
-    discussions
   end
   
 end

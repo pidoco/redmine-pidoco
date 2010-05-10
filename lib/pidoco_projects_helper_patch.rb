@@ -31,5 +31,15 @@ module PidocoProjectsHelperPatch
       tabs << pidoco_tab if(User.current.allowed_to?(pidoco_tab[:action], @project))
       tabs
     end
+    
+    def last_discussed_at(discussions)
+      last_discussed_at = Time.at(0)
+  		discussions.each do |discussion|
+  			if !(discussion[:last_discussed_at].nil?) && last_discussed_at < discussion[:last_discussed_at]
+  				last_discussed_at = discussion[:last_discussed_at]
+  			end
+  		end
+  		return last_discussed_at
+    end
   end
 end

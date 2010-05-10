@@ -30,20 +30,18 @@ class Prototype < ActiveRecord::Base
   alias_method :real_discussions, :discussions
   def discussions
     should_update = Discussion.poll_if_necessary(self)
-
-    # jsh: can be beautified using returning 
-    items = real_discussions
-    if should_update
-      items.each do |discussion|
-        discussion.refresh_from_api_if_necessary
+    returning(real_discussions) do |discussions|
+      if should_update
+        discussions.each do |discussion|
+          discussion.refresh_from_api_if_necessary
+        end
       end
     end
-    items
   end
   
   def refresh_from_api_if_necessary
     uri = "prototypes/#{api_id}.json"
-    res = PidocoRequest::request_if_necessary(uri, pidoco_key, id) if pidoco_key
+    res = PidocoRequest::request_if_necessary(uri, pidoco_key) if pidoco_key
     case res
       when Net::HTTPSuccess
         api_data = JSON.parse(res.body)
@@ -60,17 +58,16 @@ class Prototype < ActiveRecord::Base
   end
   
   def update_with_api_data(api_data)
-    attributes = {}
-    attributes[:name] = api_data["prototypeData"]["name"]
-    page_names = get_page_names_from_api
-    attributes[:page_names] = page_names if page_names
-    attributes[:last_modified] = api_data["prototypeData"]["lastModification"].to_s
-    update_attributes(attributes)
+    update_attributes(
+      :name => api_data["prototypeData"]["name"],
+      :page_names => get_page_names_from_api || nil,
+      :last_modified => api_data["prototypeData"]["lastModification"].to_s
+    )
   end
   
   def get_page_names_from_api
     uri = "prototypes/#{self.api_id}/pages.json"
-    res = PidocoRequest::request_if_necessary(uri, self.pidoco_key, self.id)
+    res = PidocoRequest::request_if_necessary(uri, self.pidoco_key)
     case res
       when Net::HTTPSuccess
         page_ids = JSON.parse(res.body)
@@ -79,7 +76,7 @@ class Prototype < ActiveRecord::Base
           page_ids.each do |page_id|
             page_uri = "prototypes/#{self.api_id}/pages/#{page_id}.json"
             # force a response as we update all page names at once
-            page_response = PidocoRequest::request_if_necessary(page_uri, self.pidoco_key, self.id, caching=false)
+            page_response = PidocoRequest::request_if_necessary(page_uri, self.pidoco_key, caching=false)
             case page_response
               when Net::HTTPSuccess
                 page_json = JSON.parse(page_response.body)
@@ -92,8 +89,7 @@ class Prototype < ActiveRecord::Base
           # old pidoco API (until 05/2010) returns an object of id-name pairs
           page_names = page_ids
         else
-          # jsh: this exception is never rescued! this must fail silently or a bad response from pidoco can break planio.
-          raise "Invalid response while getting page names."
+          RAILS_DEFAULT_LOGGER.error "Invalid response while getting page names for prototype #{id}."
         end
       else
         return {}
