@@ -97,8 +97,8 @@ class Discussion < ActiveRecord::Base
         log_message = "discussions not modified"
         RAILS_DEFAULT_LOGGER.info(log_message)
         return false
-
-        # jsh: what happens if res == nil, because of a comm error?
+      else
+        RAILS_DEFAULT_LOGGER.warn("Unable to reach pidoco when polling discussions for prototype #{prototype.id}")
     end
   end
   

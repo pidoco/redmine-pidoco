@@ -58,9 +58,10 @@ module PidocoRequest
       end
       new_settings[caching_key].update(settings_for_pidoco_key)
       Setting[:plugin_redmine_pidoco] = Setting[:plugin_redmine_pidoco].merge(new_settings)
-
       return response
     rescue Net::HTTPBroken => e
+      log_message = "Request for #{request_uri} failed with exception #{e.to_s}"
+      RAILS_DEFAULT_LOGGER.warn log_message
       return response || nil
     end
   end

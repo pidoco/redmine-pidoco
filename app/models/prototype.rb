@@ -50,9 +50,11 @@ class Prototype < ActiveRecord::Base
       when Net::HTTPNotModified
         return false
       when Net::HTTPForbidden
-        delete
+        log_message = "Access to prototype #{id} has been forbidden in pidoco's api. This prototype will not be updated."
+        RAILS_DEFAULT_LOGGER.info(log_message)
         return false
       else
+        RAILS_DEFAULT_LOGGER.warn("Unable to reach pidoco when refreshing prototype #{id}")
         return false
     end
   end

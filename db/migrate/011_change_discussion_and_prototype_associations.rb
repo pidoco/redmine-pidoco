@@ -1,5 +1,3 @@
-# jsh: will all your migrations work fine for our existing customers or will they lose data?
-
 class ChangeDiscussionAndPrototypeAssociations < ActiveRecord::Migration
   def self.up
     # Don't use pidoco's internal ids as AR ids
