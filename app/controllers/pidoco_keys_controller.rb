@@ -71,12 +71,9 @@ class PidocoKeysController < ApplicationController
   end
 
   def destroy
+    # clear the cache for this key
+    Setting[:plugin_redmine_pidoco] = Setting[:plugin_redmine_pidoco].update("pidoco_key_#{@pidoco_key.id.to_s}" => nil)
     @pidoco_key.destroy
-    
-    # jsh: hack?! TODO: remove?! ;-)
-    # clear the cache
-    # TODO hack
-    Setting[:plugin_redmine_pidoco] = {}
     
     redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
   end

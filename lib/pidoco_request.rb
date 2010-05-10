@@ -29,9 +29,10 @@ module PidocoRequest
     
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
     # different records of the same resource may share the same uri, so we prepend the pidoco_key id
-    caching_key = pidoco_key.id.to_s + "_" + request_uri
-    last_mod = Setting[:plugin_redmine_pidoco]["last_modified_" + caching_key]
-    date = Setting[:plugin_redmine_pidoco]["date_" + caching_key]
+    caching_key = "pidoco_key_#{pidoco_key.id.to_s}"
+    settings_for_pidoco_key = Setting[:plugin_redmine_pidoco][caching_key] || {}
+    last_mod = settings_for_pidoco_key["last_modified_" + request_uri]
+    date = settings_for_pidoco_key["date_" + request_uri]
     
     # Don't request more than once every 20 seconds. Otherwise we would end up requesting the prototype too often
     # when displaying all discussions, e.g.
@@ -47,11 +48,17 @@ module PidocoRequest
       http.open_timeout = 3
       http.read_timeout = 3
       response = http.start {|session| session.request(request) }
+      settings_for_pidoco_key["last_modified_" + request_uri] = response['Last-Modified']
+      settings_for_pidoco_key["date_" + request_uri] = response['Date']
+
       # This looks unnecessarily complicated. But if you don't assign the setting with []=, Redmine will not persist it. :-(
-      Setting[:plugin_redmine_pidoco] = Setting[:plugin_redmine_pidoco].merge(
-        "last_modified_" + caching_key => response['Last-Modified'],
-        "date_" + caching_key => response['Date']
-      )
+      new_settings = Setting[:plugin_redmine_pidoco]
+      if new_settings[caching_key].nil?
+        new_settings[caching_key] = {}
+      end
+      new_settings[caching_key].update(settings_for_pidoco_key)
+      Setting[:plugin_redmine_pidoco] = Setting[:plugin_redmine_pidoco].merge(new_settings)
+
       return response
     rescue Net::HTTPBroken => e
       return response || nil

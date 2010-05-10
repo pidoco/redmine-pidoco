@@ -25,10 +25,8 @@
   						<% @project.prototypes.each do |prototype| %>
   						  prototype = { "id" : "<%= h prototype.api_id%>", "name" : "<%= h prototype.name%>", "key" : "<%= h prototype.pidoco_key.key%>" };
   						  pages = {};
-  						  <% prototype.page_names.keys.each do |pageId| %>
-								<%# jsh: HTML escape!! %>
-
-  						    pages["<%= h pageId %>"] = "<%= h prototype.page_names[pageId] %>";
+  						  <% (prototype.page_names||{}).each_pair do |page_id, page_name| %>
+  						    pages["<%= h page_id %>"] = "<%= h page_name %>";
   						  <% end %>
   					    prototype["pages"] = pages;
   				      prototypes.push(prototype);

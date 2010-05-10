@@ -63,3 +63,4 @@ Redmine::Plugin.register :redmine_pidoco do
   #    "SSL" => false,
   #    "URI_PREFIX" => '/rabbit/api/'
   #  })
+end
