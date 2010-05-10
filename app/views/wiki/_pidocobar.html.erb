@@ -23,7 +23,7 @@
 
 							<%# jsh: HTML escape!! %>
 
-  						  prototype = { "id" : "<%= prototype.id%>", "name" : "<%= prototype.name%>", "key" : "<%= prototype.pidoco_key.key%>" };
+  						  prototype = { "id" : "<%= prototype.api_id%>", "name" : "<%= prototype.name%>", "key" : "<%= prototype.pidoco_key.key%>" };
   						  pages = {};
   						  <% prototype.page_names.keys.each do |pageId| %>
 								<%# jsh: HTML escape!! %>
@@ -73,8 +73,6 @@
               }
   	    }
   	    result += "</select>";
-
-				<%# jsh: _ vs. - %>
   	    Element.insert(document.getElementsByClassName("jstb_page_png")[0], {after: result});
   	},
   	insertPngLink: function(uri_part, key) {
