@@ -27,6 +27,7 @@ require 'pidoco_wiki_formatting_helper_patch'
 Dispatcher.to_prepare do
   Project.send(:include, PidocoProjectPatch)
   ProjectsHelper.send(:include, PidocoProjectsHelperPatch)
+  ProjectsController.send(:helper, :projects)
   Redmine::WikiFormatting::Textile::Helper.send(:include, PidocoWikiFormattingHelperPatch)
 end
 
