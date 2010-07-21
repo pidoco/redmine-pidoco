@@ -57,6 +57,8 @@ class PidocoKeysController < ApplicationController
       else
         render :action => 'new'
       end
+    else
+      redirect_to :controller => 'pidoco_keys', :action => 'new', :project_id => @project
     end
   end
   
