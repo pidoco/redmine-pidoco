@@ -54,7 +54,11 @@ class Discussion < ActiveRecord::Base
     case res
       when Net::HTTPSuccess
         api_data = JSON.parse(res.body)
-        update_with_api_data(api_data)
+        if prototype.page_names[api_data['pageId']].blank?
+          destroy
+        else
+          update_with_api_data(api_data)
+        end
       when Net::HTTPNotModified
         return false
       when Net::HTTPForbidden
