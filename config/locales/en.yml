@@ -30,3 +30,4 @@ en:
   pidoco_key_assigned: Your prototype has been assigned to your project. You can now embed prototype pages in the wiki.
   pidoco_key_assign_error: Your prototype could not be assigned to the project. Please choose another project or try again later.
   choose_a_page: Choose a page
+  field_key: pidoco° API Key

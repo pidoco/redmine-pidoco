@@ -30,3 +30,4 @@ de:
   pidoco_key_assigned: Ihr Prototyp wurde mit Ihrem Projekt verknüpft. Sie können nun einzelne Seiten Ihres Prototyps in das Projekt-Wiki einbinden.
   pidoco_key_assign_error: Leider konnte Ihr Protoyp nicht mit diesem Projekt verknüpft werden. Bitte wählen Sie ein anderes Projekt oder versuchen Sie es zu einem späteren Zeitpunkt erneut.
   choose_a_page: Seite wählen
+  field_key: pidoco° API-Key
