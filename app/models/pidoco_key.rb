@@ -47,7 +47,11 @@ class PidocoKey < ActiveRecord::Base
           return false
         end        
       else
-        RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was #{res.code}: #{res.body}"
+        if res
+          RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was #{res.code}: #{res.body}"
+        else
+          RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was nil. Maybe a timeout?"
+        end
         return false
     end
   end
