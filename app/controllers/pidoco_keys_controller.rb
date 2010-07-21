@@ -55,7 +55,6 @@ class PidocoKeysController < ApplicationController
         flash[:notice] = l(:notice_successful_create)
         redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
       else
-        flash.now[:error] = l(:notice_create_failed)
         render :action => 'new'
       end
     end
