@@ -31,7 +31,7 @@ module PidocoRequest
     
     request_uri = URI_PREFIX + uri + "?api_key=" + pidoco_key.key
     # different records of the same resource may share the same uri, so we prepend the pidoco_key id
-    caching_key = "pidoco_key_#{pidoco_key.id.to_s}"
+    caching_key = "pidoco_key_#{pidoco_key.id}"
     settings_for_pidoco_key = Setting[:plugin_redmine_pidoco][caching_key] || {}
     last_mod = settings_for_pidoco_key["last_modified_" + request_uri]
     date = settings_for_pidoco_key["date_" + request_uri]

@@ -60,10 +60,10 @@ class Prototype < ActiveRecord::Base
   end
   
   def update_with_api_data(api_data)
-    name = api_data["prototypeData"]["name"]
-    last_modified = api_data["prototypeData"]["lastModification"].to_s
+    self.name = api_data["prototypeData"]["name"]
+    self.last_modified = api_data["prototypeData"]["lastModification"].to_s
     # this can cause the PidocoRequest::NotModifiedException
-    page_names = get_page_names_from_api || nil
+    self.page_names = get_page_names_from_api || nil
   rescue PidocoRequest::NotModifiedException
     # nop
   ensure
