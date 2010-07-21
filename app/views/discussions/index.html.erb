@@ -8,7 +8,7 @@
 	<div id="prototype-<%= h prototype.id %>" style="margin-bottom:20px">
     	<%= content_tag(:h2, l(:Discussions_for) + l(:Prototype) + "'" + h(prototype.name) + "'", :id => h(prototype.name)) %>
     	<% if discussions.length == 0 %>
-      		<div><%= l(:no_discussions) %></div>
+      		<p class="nodata"><%= l(:no_discussions) %></p>
 		<% else %>
   			<% prototype.page_names.each do |page| %>
 				<% first_iteration = true %>
