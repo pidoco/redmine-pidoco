@@ -21,7 +21,8 @@ class PidocoKey < ActiveRecord::Base
   validates_presence_of :key, :project
   validates_associated :project
   after_create :fetch_prototype
-  
+    
+  attr_accessor :api_id
   include PidocoRequest
   
   alias_method :real_prototype, :prototype
@@ -31,30 +32,40 @@ class PidocoKey < ActiveRecord::Base
     end
   end
   
-  def fetch_prototype
-    uri = "prototypes.json"
-    # Request the prototype id without caching. We do not care if another key has the result cached.
-    res = request_if_necessary(uri, self, caching=false) 
-    case res
-      when Net::HTTPSuccess
-        begin
-          id_list = JSON.parse(res.body)
-          self.prototype = Prototype.create!(:api_id => id_list.first)
-          self.save!
-          self.prototype # invokes refresh_from_api_if_necessary
-        rescue
-          RAILS_DEFAULT_LOGGER.warn "Could not create Prototype for key #{self.key}"
-          return false
-        end        
-      else
-        if res
-          RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was #{res.code}: #{res.body}"
+  validates_each :key do |record, attr, value|
+    begin
+      uri = "prototypes.json"
+      # Request the prototype id without caching. We do not care if another key has the result cached.
+      res = request_if_necessary(uri, self, caching=false) 
+      case res
+        when Net::HTTPSuccess
+          record.api_id = JSON.parse(res.body).first
         else
-          RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was nil. Maybe a timeout?"
-        end
-        self.errors.add(:key, :invalid)
-        false
-    end
+          if res
+            RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was #{res.code}: #{res.body}"
+          else
+            RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was nil. Maybe a timeout?"
+          end
+          raise
+      end
+    rescue
+      RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype api id for key #{self.key}"
+      record.errors.add(attr, :invalid)
+      return false
+    end        
   end
+  
+  
+  def fetch_prototype
+    begin
+      self.prototype = Prototype.create!(:api_id => @api_id)
+      self.save!
+      self.prototype # invokes refresh_from_api_if_necessary
+    rescue
+      RAILS_DEFAULT_LOGGER.warn "Could not create Prototype for key #{self.key}"
+      return false
+    end        
+  end
+  
 
 end
