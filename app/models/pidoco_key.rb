@@ -36,7 +36,7 @@ class PidocoKey < ActiveRecord::Base
     begin
       uri = "prototypes.json"
       # Request the prototype id without caching. We do not care if another key has the result cached.
-      res = request_if_necessary(uri, self, caching=false) 
+      res = record.send(:request_if_necessary, uri, record, caching=false) 
       case res
         when Net::HTTPSuccess
           record.api_id = JSON.parse(res.body).first
