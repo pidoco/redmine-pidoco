@@ -42,14 +42,14 @@ class PidocoKey < ActiveRecord::Base
           record.api_id = JSON.parse(res.body).first
         else
           if res
-            RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was #{res.code}: #{res.body}"
+            RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{record.key}, response was #{res.code}: #{res.body}"
           else
-            RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{self.key}, response was nil. Maybe a timeout?"
+            RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype for key #{record.key}, response was nil. Maybe a timeout?"
           end
           raise
       end
     rescue
-      RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype api id for key #{self.key}"
+      RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype api id for key #{record.key}"
       record.errors.add(attr, :invalid)
       return false
     end        
