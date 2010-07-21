@@ -20,7 +20,7 @@ class PidocoKey < ActiveRecord::Base
   belongs_to :prototype, :dependent => :destroy
   validates_presence_of :key, :project
   validates_associated :project
-  before_create :fetch_prototype
+  after_create :fetch_prototype
   
   include PidocoRequest
   
@@ -39,7 +39,8 @@ class PidocoKey < ActiveRecord::Base
       when Net::HTTPSuccess
         begin
           id_list = JSON.parse(res.body)
-          self.build_prototype(:api_id => id_list.first)
+          self.prototype = Prototype.create!(:api_id => id_list.first)
+          self.save!
           self.prototype # invokes refresh_from_api_if_necessary
         rescue
           RAILS_DEFAULT_LOGGER.warn "Could not create Prototype for key #{self.key}"

@@ -51,7 +51,7 @@ class PidocoKeysController < ApplicationController
       key = params[:pidoco_key][:key]
       key = $1 if /api_key=([\w\d]+)/.match(key)
       @pidoco_key = PidocoKey.new :key => key, :project => @project
-      if @pidoco_key.save
+      if @pidoco_key.save and @pidoco_key.valid?
         flash[:notice] = l(:notice_successful_create)
         redirect_to :controller => 'projects', :action => 'settings', :id => @project, :tab => 'pidoco'
       else
