@@ -32,7 +32,7 @@ class PidocoKey < ActiveRecord::Base
     end
   end
   
-  validates_each :key do |record, attr, value|
+  validates_each( :key, :on => :create ) do |record, attr, value|
     begin
       uri = "prototypes.json"
       # Request the prototype id without caching. We do not care if another key has the result cached.
@@ -51,7 +51,7 @@ class PidocoKey < ActiveRecord::Base
     rescue
       RAILS_DEFAULT_LOGGER.warn "Could not fetch Prototype api id for key #{record.key}"
       record.errors.add(attr, :invalid)
-      return false
+      false
     end        
   end
   
