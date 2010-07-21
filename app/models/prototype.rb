@@ -60,11 +60,14 @@ class Prototype < ActiveRecord::Base
   end
   
   def update_with_api_data(api_data)
-    update_attributes(
-      :name => api_data["prototypeData"]["name"],
-      :page_names => get_page_names_from_api || nil,
-      :last_modified => api_data["prototypeData"]["lastModification"].to_s
-    )
+    name = api_data["prototypeData"]["name"]
+    last_modified = api_data["prototypeData"]["lastModification"].to_s
+    # this can cause the PidocoRequest::NotModifiedException
+    page_names = get_page_names_from_api || nil
+  rescue PidocoRequest::NotModifiedException
+    # nop
+  ensure
+    save
   end
   
   def get_page_names_from_api
@@ -93,8 +96,12 @@ class Prototype < ActiveRecord::Base
         else
           RAILS_DEFAULT_LOGGER.error "Invalid response while getting page names for prototype #{id}."
         end
-      else
-        return {}
+      when Net::HTTPNotModified # http says not modified, this is obvious
+        raise PidocoRequest::NotModifiedException
+      when nil # this could be caused by a general HTTP connection problem
+        raise PidocoRequest::NotModifiedException
+      else 
+        raise PidocoRequest::NotModifiedException
     end
     page_names
   end

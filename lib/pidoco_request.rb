@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 module PidocoRequest
+  class NotModifiedException < Exception
+  end
   default_settings = Redmine::Plugin.find(:redmine_pidoco).settings[:default]
   HOST = default_settings["HOST"]
   PORT = default_settings["PORT"]
