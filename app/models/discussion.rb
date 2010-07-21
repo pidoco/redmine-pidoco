@@ -99,6 +99,7 @@ class Discussion < ActiveRecord::Base
         return false
       else
         RAILS_DEFAULT_LOGGER.warn("Unable to reach pidoco when polling discussions for prototype #{prototype.id}")
+        return false
     end
   end
   
