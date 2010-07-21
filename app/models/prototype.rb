@@ -35,6 +35,7 @@ class Prototype < ActiveRecord::Base
         discussions.each do |discussion|
           discussion.refresh_from_api_if_necessary
         end
+        discussions.reload
       end
     end
   end

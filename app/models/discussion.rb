@@ -54,7 +54,8 @@ class Discussion < ActiveRecord::Base
     case res
       when Net::HTTPSuccess
         api_data = JSON.parse(res.body)
-        if prototype.page_names[api_data['pageId']].blank?
+        RAILS_DEFAULT_LOGGER
+        if api_data['pageId'].blank? or prototype.page_names[api_data['pageId']].blank?
           destroy
         else
           update_with_api_data(api_data)
@@ -62,7 +63,7 @@ class Discussion < ActiveRecord::Base
       when Net::HTTPNotModified
         return false
       when Net::HTTPForbidden
-        delete
+        destroy
         return false
       else
         return false
