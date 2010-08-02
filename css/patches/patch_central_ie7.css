@@ -1,0 +1,127 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) Example of a patch stylesheet for the Internet Explorer
+ * (de) Beispiel für ein Anpassungs-Stylesheet für den Internet Explorer
+ *
+ * @copyright       Copyright 2005-2007, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.0.3
+ * @revision        $Revision: 118 $
+ * @lastmodified    $Date: 2007-08-18 16:03:42 +0200 (Sa, 18 Aug 2007) $
+ */
+
+/* Layout independent adjustments | Layout-unabhängige Anpassungen ----------------------------------- */
+/* @import url(../../yaml/core/iehacks.css);
+
+/* Box model adjustments for vlist navigation | Box-Modell-Anpassungen für vlist-Navigation */
+/* @import url(/yaml/patches/patch_nav_vlist.css); */
+
+/* Layout-dependent adjustments | Layout-abhängige Anpassungen --------------------------------------- */
+@media all
+{
+  /* add your adjustments here | Fügen Sie Ihre Anpassungen hier ein */
+  .clearfix { display: inline-block } 
+  
+  #clearing {
+  	display:none; }
+	
+  .tab_inactive {
+	margin-top:85px; }
+	
+  .tab_active {
+	margin-top:85px; }
+	
+  #page_margins { 
+  	width: 1002px; }
+		
+  .input_text_green input {
+	margin-top:0px;
+	width:150px; }
+	
+  .search_grey_text input {
+	margin-top:1px;
+	width:250px; }
+	
+  .input_text_green {
+	float:none;}
+  
+  .input_button_green {
+  	float:none;
+	margin-top:2px;
+	margin-left:-3px; 
+	margin-bottom:13px; 
+	height:10px; 
+	width:0px; }
+
+  .main_menu_text {
+  	margin-top:0px;
+  	float:none; }
+	
+  .input_button_green input {
+	border:1px solid; 
+	width:75px;
+	margin-left:0px; }
+	
+  #content_area_padding { 
+  	height: auto;
+	min-height: 360px; }
+	
+	#tabs-wrapper li {
+	background-color:#fff;}
+	
+	#tabs-wrapper {
+	margin-top:-9px;	
+	}	
+	
+	#tabs-wrapper li a {
+	text-decoration:underline;
+	 }
+	 
+	 #tabs-wrapper li a:hover {
+	color:#000;
+	 }
+	 
+	#tabs-wrapper li .active {
+	 font-weight:bold;
+	}
+	
+		#tabs-wrapper li .active {
+	border:0px solid;
+	}
+	
+	 #content_area form label,
+  #content_area form select, 
+  #content_area form input.form-text { 
+	  margin-bottom:2px;
+	}
+	
+	 ul.tips li {
+ 	display:inline; margin-left:0px;
+	}
+	
+	#content_area form input#edit-submit{ 
+		float:none;
+		clear:left;
+	  
+	}
+        #content_area form input#edit-submit, 
+	#content_area form input#edit-delete,
+	#content_area form input#edit-preview,
+	#content_area .nicebutton { 
+		float:none;
+		clear:left;
+		width: auto;
+		margin-top:5px;
+		padding-right:0px;
+		padding-left:0px;
+		border:1px #74820c solid;
+		margin-bottom:10px;
+		              
+	}
+
+}

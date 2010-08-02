@@ -1,0 +1,689 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) Template for designing a screen layout
+ * (de) Gestaltungsvorlage für die Erstellung eines Screenlayouts
+ *
+ * @copyright       Copyright 2005-2007, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.0.3
+ * @revision        $Revision: 118 $
+ * @lastmodified    $Date: 2007-08-18 16:03:42 +0200 (Sa, 18 Aug 2007) $
+ */
+
+@media all
+{
+ /*------------------------------------------------------------------------------------------------------*/
+
+ /**
+  * Design of the Basic Layout | Gestaltung des YAML Basis-Layouts
+  *
+  * @section layout-basics
+  */
+
+  /* Page margins and background | Randbereiche & Seitenhintergrund */
+  body {  
+	background-color: #BEBEBE;
+	background-position:center;
+	background-repeat:repeat-y;
+	text-align:center; 
+    }
+
+  /* Layout: Width, Background, Border | Layout: Breite, Hintergrund, Rahmen */
+  #page_margins { 
+  	width: 1000px; 
+    margin: 0 auto;
+	background-color: #2F2F2F;	
+	border-bottom: 1px #FFF solid; 
+	border-left: 1px #FFF solid; 
+	border-right: 1px #FFF solid; }
+	
+  #page{  
+  	background-image: url(../../images/lines.gif); 
+	background-position: bottom left;
+	background-repeat: no-repeat;
+	background-color: #2F2F2F; }
+
+  /* Design of the Main Layout Elements | Gestaltung der Hauptelemente des Layouts */
+  #header {
+  	width: 914px; 
+    margin: 0 auto; 
+	height:106px; }
+	
+  #topnav { 
+	color:#879922; 
+	height:19px;
+	width:550px; }
+	
+   #nav { }  
+  
+  #main { 
+    background-image: url(../../images/background_green.gif);
+	background-position: bottom;
+	background-repeat: no-repeat; 
+	text-align:left; 
+	min-height:430px; }
+	
+  #schadow_lr {
+    background-image: url(../../images/schadow_left_right.gif);
+	width: 914px; 
+    margin: 0 auto;
+	}
+  
+  #schadow_t {
+    background-image: url(../../images/schadow_top.gif);
+	background-position: top;
+	background-repeat: no-repeat; }
+
+  #footer {
+  	text-align: right; 
+	background-image: url(../../images/background_footer.gif);
+	background-repeat: no-repeat;
+	height: 69px; 
+	width: 914px; 
+    margin: 0 auto;
+	color:#879922; 
+	font-size:12px;}
+	
+  #footer ul, #footer li {
+  	display: inline; }
+
+  #footer_l {
+  	float:left;
+	text-align:left;
+	width:auto;
+	padding-left:20px;
+	padding-top:15px;
+  }
+  
+  #footer_r {
+  	float:none;
+	text-align:right;
+	width:auto;
+	padding-top:7px;  
+	padding-right:20px;}
+	
+  #footer_r li a {
+  	text-decoration:none;
+	font-weight:normal;
+    color:#879922; }
+	
+  #footer_r li a:hover,
+  #footer_r li a:focus {
+    color:#FFF; 
+	text-decoration:none; }
+
+ /*------------------------------------------------------------------------------------------------------*/
+
+ /**
+  * Formatting of the Content Area | Formatierung der Inhaltsbereichs
+  *
+  * @section layout-main
+  */
+  
+  #col1 {
+  	float:left;
+	width: 288px; }
+  #col1_content { 
+  	padding: 14px 10px 10px 10px;}
+
+  #col2, #col2_content { display:none; }
+
+  #col3 {
+  	margin-left: 15px; 
+	margin-right: 12px;}
+  #col3_content {  
+  	padding-bottom:10px;
+	padding-top:22px; }
+  
+
+ /*------------------------------------------------------------------------------------------------------*/
+
+ /**
+  * Design of Additional Layout Elements | Gestaltung weiterer Layoutelemente
+  *
+  * @section layout-misc
+  */
+  
+  #logo {
+  	float:left;
+	width:287px; 
+	height:102px;
+	background-image: url(../../images/pidoco_logo.gif);
+	background-repeat:no-repeat; }
+	
+  #tabs {
+  	margin-left:287px; }
+	
+  #nav_main { } 
+	
+  #nav_main ul, #nav_main li {
+  	display: inline; }
+	
+  #topnav ul, #topnav li {
+  	display: inline; }
+	
+  #topnav_ext{
+     clear:both;
+	padding-top:2px;
+	}
+	
+  #headline {
+  	background-color: #b1c519;
+	/*filter:alpha(opacity= 50); 
+	-moz-opacity:.50; 
+	opacity:.50;*/
+	text-align:center;
+	border-bottom:2px #74820c solid;
+	border-top:2px #74820c solid;
+	margin-left:-13px;
+	margin-right:-15px;
+	margin-top:5px; 
+	margin-bottom:2px;
+	padding-top:2px;}
+	
+  #headline a {
+    text-decoration:none; }
+	
+  #metainformation {
+	font-size:11px;
+	margin-top:-1px;
+	 }
+	 
+  .login_grey_text {
+  	float:right;
+    background-image:url(../../images/login_grey.gif);
+	background-repeat:no-repeat;
+	width:200px;
+	height:19px;
+	margin-right:-10px; }
+
+  .search_grey_text {
+  	float:right;
+    background-image:url(../../images/search_grey.gif);
+	background-repeat:no-repeat;
+	width:270px;
+	height:19px;
+	margin-right:5px; }
+
+  .search_grey_text input {
+  	border:none;
+	background-color:#52504E;
+	color:#879922;
+	width:260px;
+	margin-top:2px;
+	margin-right:7px;
+	text-align:right; }
+
+  .login_grey_text input {
+  	border:none;
+	background-color:#52504E;
+	color:#879922;
+	width:170px;
+	margin-top:2px;
+	margin-right:24px;
+	text-align:right; }
+
+  .search_grey_button {
+  	float:right;
+	width:19px;
+	margin-right:5px; }
+
+  .search_grey_button input {
+  	border:none;
+	background-image:url(../../images/search_button.gif);
+	background-repeat:no-repeat;
+	color:#879922;
+	width:19px;
+	height:19px;
+	cursor:pointer; }
+
+  .login_grey_button {
+  	float:right;
+	margin-right:5px;
+	background-color:#43413f; }
+
+  .login_grey_button input {
+  	border:1px solid #879922;
+	background:none;
+	color:#879922;
+	height:19px;
+	padding-right: 4px;
+	padding-left: 4px;
+	cursor:pointer; }
+
+  .login_grey_button input:hover {
+    	color:white;
+	border:1px solid white; }
+
+  .search_grey_button input:hover {
+    background-image:url(../../images/search_button_hover.gif); }
+
+  #flags {
+  	float:right; }
+
+  .tab_active {
+  	float:right;
+    background-image:url(../../images/tab_active.gif); 
+	background-repeat:no-repeat;
+	background-position:bottom;
+	margin-top:87px;
+	width:125px;
+	height:43px;
+	line-height:45px; 
+	text-align:center;}
+	
+  .tab_active a {
+  	font-size:12px;
+	font-weight:bold;
+	color:#FFFFFF;
+	text-decoration:none;
+	background-color:transparent;
+	padding: 7px 15px; }
+  
+  .tab_active a:hover,
+  .tab_active a:focus,
+  .tab_inactive a:hover,
+  .tab_inactive a:focus {
+  	text-decoration:none;
+	color:#FFF;
+	background:none;
+  }
+	
+  .tab_inactive {
+  	float:right;
+    background-image:url(../../images/tab_inactive.gif); 
+	background-repeat:no-repeat;
+	background-position:bottom;
+	margin-top:87px;
+	width:125px;
+	height:43px;
+	line-height:45px; 
+	text-align:center; }
+	
+  .tab_inactive a {
+  	font-size:12px;
+	font-weight:bold;
+	color:#262626; 
+	text-decoration:none;
+	background-color:transparent;
+	padding: 7px 15px; }
+  
+  .main_menu {
+  	background-color:#43413f;
+	margin-left:8px;
+	margin-top:8px;
+	margin-bottom:15px; 
+	color:#b1c519; 
+	padding-bottom:0px; }
+	
+  .main_menu li {
+    list-style:none; }
+  
+  .main_menu a {
+  	font-weight:bold;
+	text-decoration:none;
+	color:#b1c519; }
+	
+  .main_menu a:hover,
+  .main_menu a:focus,
+  .main_menu a:hover,
+  .main_menu a:focus {
+  	text-decoration:none;
+	color:#FFF;
+	background:none; }
+	
+  .main_menu h2{
+  	font-size:16px; }
+	
+  .main_menu ul li,
+  .main_menu ul {
+  	margin:0px; 
+	padding:0px;
+	padding-left:3px; }
+
+  .main_menu ul li ul li,
+  .main_menu ul li ul {
+  	margin:0px; 
+	padding-left:6px; }
+	
+  .main_menu_text {
+  	margin-top:40px;
+  	float:none; }
+	
+  .input_text_green {
+  	background-image:url(../../images/input_text_green.gif);
+	float:left;
+	width:170px;
+	height:19px;
+	margin-top:5px;
+	margin-bottom:5px; }
+  
+  .input_text_green input {
+  	background:#96a716; 
+	border:none; 
+	margin-top:2px;
+	margin-left:6px;
+	width:160px;
+	color:#43413f; }
+	
+  .input_button_green {
+  	float:left;
+	width:50px;
+	height:30px;
+	margin-top:7px;
+	margin-left:2px; }
+	
+  .input_button_green input {
+  	background:#43413f;
+	border:none; 
+	color:#b1c519;
+	font-weight:bold;
+	cursor:pointer; }
+	
+  .input_button_green input:hover {
+	color:#FFF; }	
+	
+  .main_menu_padding {
+    padding-top:4px;
+  	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:7px; }
+	
+  b.rtop, b.rbottom{display:block;background: #b1c519; font-size:0px}
+ b.rtop b, b.rbottom b{display:block;height: 1px; background: #43413f}
+  b.r1{margin: 0 5px}
+  b.r2{margin: 0 3px}
+  b.r3{margin: 0 2px}
+  b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+  
+  #content_area {
+  	background-color:#FFF;
+	margin-left:5px;
+	margin-right:10px;
+	margin-bottom:15px;
+	color:#161521; }
+ 
+  #content_area h2 {
+  	font-size:16px; }
+
+#content_area h3 {
+  	font-size:14px; }
+
+  #content_area a {
+    color:#161521; }
+	
+  #content_area li a:hover,
+  #content_area li a:focus {
+    color:#161521; 
+	background:none;
+	text-decoration:none; }
+	  #content_area b.rtop, #content_area b.rbottom{display:block;background: #b1c519}
+  #content_area b.rtop b, #content_area b.rbottom b{display:block;height: 1px; background: #FFF}
+  #content_area b.r1{margin: 0 5px}
+  #content_area b.r2{margin: 0 3px}
+  #content_area b.r3{margin: 0 2px}
+  #content_area b.rtop b.r4, #content_area b.rbottom b.r4{margin: 0 1px;height: 2px}
+  
+  #content_area_padding {
+    padding-top:4px;
+  	padding-left:15px;
+	padding-right:17px;
+	padding-bottom:7px; 
+	font-size:14px;
+	min-height:340px}
+	
+  #content_area_padding input {
+    background-color:white; }
+	
+  #clearing {
+  	font-size:1px; 
+	color:#2F2F2F;
+	clear:right;}
+	
+	
+	/* Tabs in Pages */
+	
+	#tabs-wrapper{
+	margin-top:-11px;
+	padding-bottom:5px;
+	text-align:right;
+	margin-right:25px;
+	
+	}
+	
+	#tabs-wrapper ul, 
+	#tabs-wrapper li,
+	#forum ul,
+	#forum li {
+	display:inline; 
+	}
+	
+	#tabs-wrapper li{
+	background-color:#b1c519;
+	margin-right:-25px;}
+	
+	#tabs-wrapper li a {
+	text-decoration:none;
+	padding-right:10px;
+	padding-left:10px;
+
+	 }
+	 
+	 #tabs-wrapper li a:hover{
+	color:#FFFFFF;
+	 }
+	 
+	#tabs-wrapper li .active{
+	 background-color:#FFFFFF;
+	 	border-color:#b1c519;
+	border-left:1px solid;
+	border-right:1px solid;
+	border-top:1px solid;
+	}
+	
+	/*Forms*/	
+		#content_area form {
+		margin-top:15px;
+	}
+	
+	  #content_area form legend,
+	  #test fieldset legend{
+  	font-size:14px;
+	font-weight:bold;
+	background-color: #b1c519;
+	border:2px #74820c solid;
+	padding-left:5px;
+	padding-right:5px;}
+	  
+	  #content_area form label {
+	clear:left; }
+	
+  #content_area form label,
+  #content_area form select, 
+  #content_area form input.form-text { 
+	  display: inline;
+	  float: left;
+	  width: 260px;
+	  margin-bottom:2px;
+	}
+	
+	 #content_area form label {
+	 margin-bottom:5px;
+	 }
+	 
+	 
+	 
+	 #content_area form textarea { 
+	  display: block;
+	  float: left;
+	  width: 520px;
+	  margin-bottom:2px;
+	}
+	  
+	#content_area form .form-item { 
+		 /*border:1px #74820c solid;*/
+		}
+	
+	#content_area form input .edit-submit, 
+	#content_area form input#edit-delete,
+	#content_area form input#edit-preview,
+	#content_area .nicebutton,
+	#content_area .form-submit { 
+		float:none;
+		clear:left;
+	  width: auto;
+	  margin-top:5px;
+	  padding-right:15px;
+	  padding-left:15px;
+	  border:1px #74820c solid;
+	  margin-bottom:10px;
+	  
+	}
+	
+	#content_area form input .edit-submit:hover,
+	#content_area form input#edit-delete:hover,
+	#content_area form input#edit-preview:hover,
+	#content_area .nicebutton:hover,
+	#content_area .form-submit:hover { 
+	  background-color:#b1c519;
+	}
+	
+	.content {
+	    margin-top:7px;
+	}
+	
+	
+.error{
+border-color:red;}
+
+div.error {
+border-top:2px solid #C52020;
+border-bottom:2px solid #C52020;
+background:#FFCCCC none repeat scroll 0% 0%;
+margin-bottom:15px;
+margin-left:-15px;
+margin-right:-17px;
+padding-top:10px}
+
+.messages, .preview {
+margin-top: 10px;
+}
+
+
+#content_area form fieldset { 
+	width:535px;
+ border:2px #74820c solid;
+  padding:15px;
+  margin-top:5px;
+  clear:right;
+}
+
+#content_area form fieldset fieldset{ 
+	width:500px;
+ border:1px #74820c solid;
+  padding:15px;
+  clear:both;
+}
+
+ ul.tips li {
+ 	font-size:9px; display:block; margin-left:-15px;
+	clear:left;
+ }
+ 
+ .description {
+ float:none;
+ clear:left;
+ 	font-size:9px;
+	text-align:right;
+	margin-right:10px;
+ }
+	
+	/* Meta Links*/ 
+	#inline,
+	#inline ul,
+	#inline li {
+	 display:inline;
+	 float:right;
+	 font-size:11px;
+	 margin-top:-1px;
+	}
+	
+ /* #login {
+  	display:none; }*/
+	
+	/* comments */
+	
+	h2.comments {
+	display:none; }
+	
+	/*forum*/
+	#forum table {
+		margin-top:10px;
+	}
+	
+	#forum thead,
+	#forum th {
+	text-align:center;
+	background-color: #b1c519;
+	border-bottom:2px #74820c solid;
+	border-top:2px #74820c solid;
+	color:#000000;
+	padding: 0 0 0 0;
+	padding-left:5px;}
+	
+	#forum .description {
+	text-align:left;
+	font-size:12px;}
+	
+	
+	/* Pager */
+	.pager-first, .pager-last, .pager-next, .pager-previous, .pager-current {
+	    margin-right: 7px;
+	}
+	
+	.pager-current {
+	 font-weight: normal;
+	}
+	
+	.pager {
+	    text-align:center;
+	}
+	
+	.ruleshl {
+	    background-color: #b1c519;
+	    font-weight: bold;
+	    width: 260px;
+	    text-align: center;
+	    border: solid 1px #74820c;
+	    padding-top: 5px;
+	    padding-bottom: 5px;
+	    padding-left: 8px;
+	    padding-right: 8px;
+	}
+	
+	.rulestext {
+	    /*font-size: smaller;*/
+	    width: 260px;
+	    border-bottom: solid 1px #74820c;
+	    border-left: solid 1px #74820c;
+	    border-right: solid 1px #74820c;
+	    padding-top: 5px;
+	    padding-left: 8px;
+	    padding-right: 8px;
+	}
+	
+	.rulestext ul li {
+	    line-height: 13px;
+	    margin-left: 10px;
+	}
+	
+	.anker {
+	    text-decoration: none;
+	}
+}
+
