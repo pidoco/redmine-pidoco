@@ -1,5 +1,8 @@
 # Pidoco Redmine Integration Plugin
-# Copyright (C) 2010 pidoco GmbH
+# Copyright (C) 2010 
+#   Martin Kreichgauer, Pidoco GmbH
+#   Jan Schulz-Hofen, Rocket Rentals GmbH
+#   Volker Gersabeck, Pidoco GmbH
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
